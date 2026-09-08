@@ -1,0 +1,266 @@
+.vstatus-page {
+  min-height: 100vh;
+  background: var(--paper);
+}
+
+.vstatus-topbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 56px;
+  padding: 0 32px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+
+.vstatus-topbar-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.vstatus-avatar-btn {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 12px 4px 4px;
+}
+.vstatus-avatar-btn:hover {
+  background: var(--paper);
+}
+.vstatus-avatar-btn .avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--blue-tint);
+  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--blue-dark);
+}
+.vstatus-avatar-btn .name {
+  font-size: 12.5px;
+  font-weight: 500;
+}
+.vstatus-avatar-btn .caret {
+  font-size: 10px;
+  color: var(--dim);
+}
+
+.vstatus-content {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 48px 32px 56px;
+}
+
+.vstatus-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: var(--sh);
+  padding: 32px;
+}
+
+.vstatus-card h1 {
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.024em;
+  margin: 18px 0 0;
+}
+.vstatus-card > p {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--body);
+  margin: 10px 0 0;
+  max-width: 60ch;
+}
+
+.vstatus-timeline {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  margin-top: 24px;
+  overflow: hidden;
+}
+.vstatus-timeline-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 15px;
+  border-bottom: 1px solid var(--line);
+}
+.vstatus-timeline-row:last-child {
+  border-bottom: none;
+}
+.vstatus-timeline-row.active {
+  background: var(--warn-tint);
+}
+.vstatus-timeline-row .marker {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  flex: none;
+}
+.vstatus-timeline-row .marker.done {
+  background: var(--ok-tint);
+  border: 1px solid var(--ok-line);
+  color: var(--ok-deep);
+}
+.vstatus-timeline-row .marker.active {
+  background: var(--surface);
+  border: 1px solid var(--warn-line);
+  color: var(--warn-deep);
+}
+.vstatus-timeline-row .marker.todo {
+  border: 1px solid var(--line2);
+  color: var(--dim);
+}
+.vstatus-timeline-row .body {
+  flex: 1;
+  min-width: 0;
+}
+.vstatus-timeline-row .body .title {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 500;
+}
+.vstatus-timeline-row.active .body .title {
+  font-weight: 600;
+}
+.vstatus-timeline-row .body .subtitle {
+  display: block;
+  font-size: 12.5px;
+  color: var(--dim);
+}
+.vstatus-timeline-row.active .body .subtitle {
+  color: var(--warn-deep);
+}
+.vstatus-timeline-row .when {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--dim);
+  white-space: nowrap;
+}
+.vstatus-timeline-row.active .when {
+  color: var(--warn-deep);
+}
+.vstatus-timeline-row.todo .body .title {
+  color: var(--dim);
+}
+
+.vstatus-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+}
+.vstatus-actions button,
+.vstatus-actions a {
+  padding: 12px 20px;
+  font-size: 14px;
+}
+
+.vstatus-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(232px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+.vstatus-info-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: var(--sh);
+  padding: 16px;
+}
+.vstatus-info-card .title {
+  font-size: 13.5px;
+  font-weight: 600;
+}
+.vstatus-info-card p {
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--body);
+  margin: 6px 0 0;
+}
+
+.vstatus-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 24px;
+}
+.vstatus-summary-cell {
+  padding: 14px 16px;
+  border-right: 1px solid var(--line);
+}
+.vstatus-summary-cell:last-child {
+  border-right: none;
+}
+.vstatus-summary-cell .label {
+  font-size: 12px;
+  color: var(--dim);
+}
+.vstatus-summary-cell .value {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 3px;
+  white-space: nowrap;
+}
+
+.vstatus-next-steps {
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 24px;
+}
+.vstatus-next-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+.vstatus-next-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+.vstatus-next-item .num {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: var(--blue-tint);
+  color: var(--blue-dark);
+  display: grid;
+  place-items: center;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  flex: none;
+}
+.vstatus-next-item .text {
+  flex: 1;
+  min-width: 0;
+  font-size: 13.5px;
+}
+.vstatus-next-item button {
+  padding: 6px 12px;
+  font-size: 12.5px;
+  white-space: nowrap;
+}
+.vstatus-next-item button:hover:not(:disabled) {
+  border-color: var(--blue);
+  color: var(--blue-dark);
+}
