@@ -1,212 +1,155 @@
 # SurplusBid Frontend
 
-React + TypeScript + Vite frontend for [surplusbid-backend](../surplusbid-backend).
-This first milestone implements **Section A — Public & Authentication** from
-the Claude Design handoff (`SurplusBid A - Public and Auth.dc.html`):
+Next.js frontend for **SurplusBid**, a B2B auction marketplace for industrial surplus. Verified sellers
+list lots, verified buyers place a refundable Stripe deposit hold and bid in timed auctions with
+anti-sniping, and admins verify businesses, manage the catalog and resolve disputes.
 
-1. Landing page
-2. Login (email/password + Google OAuth)
-3. Register (buyer/seller role picker)
-4. Forgot password
-5. Reset password
-6. Business verification submission
-7. Verification status (pending / approved)
+It consumes the [surplusbid-backend](https://github.com/joynto7/surplusbid-backend) REST API (B7A6).
 
-## Section B — Buyer
-
-From `SurplusBid B - Buyer.dc.html`, plus the buyer screens from
-`SurplusBid Standard.dc.html` (browse, lot detail, bid/deposit modal, my bids)
-that B depends on. Also includes Section E's 404 / 403 / session-expired states.
-
-| Route | Screen |
+| | |
 | --- | --- |
-| `/buyer` | Dashboard |
-| `/lots`, `/lots/:id` | Browse, lot detail + bid terminal + deposit/bid modal |
-| `/buyer/bids` | My bids & watchlist (Active / Won / Lost / Watching) |
-| `/buyer/checkout/:paymentId` (`/success`, `/failed`) | Checkout, payment success, payment failed |
-| `/buyer/invoices/:paymentId` | Invoice / receipt (Download PDF = print) |
-| `/buyer/settings` | Profile & settings |
-| `/buyer/notifications` | Notifications center |
-| `/buyer/disputes/new` | File a dispute |
+| Live frontend | `<add your Vercel URL>` |
+| Live API | https://surplusbid-api.onrender.com/api/v1 |
+| API docs | https://documenter.getpostman.com/view/56417304/2sBYAxPUve |
 
-Verified buyers land on `/buyer` after login. The lots catalog is buyer-only
-for now because it uses the buyer shell. Other roles get the 403 page.
+## Tech stack
 
-Checkout uses Stripe's Payment Element in deferred-intent mode: the form renders
-without calling the backend, and `POST /payments/initiate` (which captures the
-deposit hold) only runs when the buyer clicks Pay. Set
-`VITE_STRIPE_PUBLISHABLE_KEY` to enable it.
-
-### Buyer gaps vs. the design
-
-Things the design shows that the backend can't support yet:
-
-- **Watchlist, notification read state and preferences** live in
-  `localStorage` (per device). No watchlist or notifications API exists.
-- **Notifications are derived** from your bids, lots and payments (outbid,
-  closing soon, won, payment due/failed, deposit released) instead of coming
-  from a feed. Email/SMS columns were dropped.
-- **Deposit amounts** are computed client-side as `DEPOSIT_PERCENT` of the
-  starting price (the backend's formula). No endpoint lists your holds, so
-  "deposit authorized" is remembered per browser. Keep `VITE_DEPOSIT_PERCENT` /
-  `VITE_PAYMENT_DEADLINE_HOURS` in sync with the backend env.
-- **Bid/deposit modal** has 3 steps instead of 4: `POST /lots/:id/deposit`
-  takes no card details, so the "card for the hold" step was dropped.
-- **Order summary / invoice** show hammer price, deposit and balance only. The
-  backend has no buyer premium, tax, seller address or removal deadline.
-  Removal choice at checkout is not sent anywhere.
-- **Saved payment methods, password change, active sessions, dispute evidence
-  upload, "Save draft", "Email a copy"** have no endpoints. They're replaced
-  with honest empty states or links (e.g. password → forgot-password flow).
-- **Browse** has no price filter or bid counts (not in `GET /lots`).
-- **Retrying a failed payment**: the backend marks a Payment `FAILED` on
-  Stripe's `payment_failed` webhook, and after that `/payments/initiate`
-  returns 409 and a later success webhook is ignored. Checkout shows a support
-  notice in that case. This needs a backend change to allow retries.
-
-## Section C — Seller
-
-From `SurplusBid C - Seller.dc.html`, plus the Standard file's lot creation
-wizard and inventory log. Verified sellers land on `/seller` after login.
-
-| Route | Screen |
+| Concern | Choice |
 | --- | --- |
-| `/seller` | Seller dashboard |
-| `/seller/listings` | Inventory log (status filter, 7-day bid sparkline, reserve status) |
-| `/seller/lots/new` | Lot creation wizard (`?from=<lotId>` relists a closed lot) |
-| `/seller/lots/:id/edit` | Edit draft lot (drafts only) |
-| `/seller/lots/:id` | Lot performance (bid chart, bid log, bid pace) |
-| `/seller/payouts` | Payouts & earnings (closed lots, CSV export) |
-| `/seller/settings` | Seller profile & settings |
-| `/seller/notifications` | Seller notifications |
+| Framework | Next.js 16 (App Router, React 19, React Compiler), TypeScript strict |
+| UI | Tailwind CSS v4, shadcn/ui (Radix primitives), Lucide icons, next-themes (dark mode) |
+| Server state | TanStack Query v5 with server prefetch + `HydrationBoundary` |
+| Client state | Zustand (watchlist, lot-wizard draft, UI preferences, deposit memory) |
+| Forms | React Hook Form + Zod v4 (schemas mirror the backend's Zod rules) |
+| Auth | Backend JWTs stored in **httpOnly cookies**, `proxy.ts` route protection, server actions |
+| Payments | Stripe Payment Element (test mode), success and cancel redirects |
+| Charts | Recharts via shadcn chart, lazily loaded with `next/dynamic` |
+| Toasts | Sonner |
+| Lint/format | Biome |
 
-Sellers can also open `/lots/:id`, which is what "Preview as buyer" uses.
+## Roles and one-click demo login
 
-### Seller gaps vs. the design
+The login page has one **Demo login** button per role. The button calls a server action that signs
+in with credentials from **server-only env vars**, so the demo passwords never reach the browser.
 
-- **Photos**: `POST /lots` accepts up to 5 images, and only at creation. There's
-  no endpoint to add or reorder them later. The design's "8 minimum" became
-  "up to 5", and the draft editor shows photos read-only.
-- **Drafts need every field**: `POST /lots` requires all fields, so the wizard
-  can only save once every step is valid. There's no partial server-side draft.
-- **No review queue**: publishing (`PATCH /lots/:id/publish`) makes a lot LIVE
-  immediately, so "Submit for review" became "Publish lot".
-- **No payouts, platform fee, views, watchers, unique bidders or bidder
-  identities** in the API. The payouts page lists closed lots with the hammer
-  price, the buyer deposit (the `DEPOSIT_PERCENT` rule) and the balance due.
-  Fee and "net to you" lines were dropped. The payout-account tab points to
-  billing. Bid-log rows show bid IDs, not bidder aliases.
-- **Location, removal deadline, inspection window, relist-if-unsold, removal
-  contact/terms**: no fields on `Lot`/`User`, so they're omitted.
-  Anti-sniping is always on in the backend (2 min), so it's shown as a locked
-  checkbox.
-- **Notifications** are derived from your lots and their bid history, the same
-  approach as the buyer side. Read state and preferences are stored in the
-  browser only.
-- **Reserve isn't enforced at close**: the backend's close job marks any lot
-  with a bid as SOLD, even below reserve. The UI shows reserve met/not met but
-  can't change that outcome.
+| Role | Lands on | Can do |
+| --- | --- | --- |
+| Admin | `/admin` | Platform stats and charts, verification queue, user directory, lots, categories, dispute console, audit log with CSV export |
+| Buyer | `/buyer` | Overview, my bids (by standing), watchlist, payments and Stripe checkout, disputes, profile |
+| Seller | `/seller` | Overview, listings (publish/edit/delete/relist), 4-step lot wizard, lot performance, earnings with CSV export, disputes, profile and auction defaults |
 
-## Section D — Admin
+Demo accounts come from the backend seed: `admin@surplusbid.com`, `seller@surplusbid.com`,
+`buyer@surplusbid.com`. The passwords are set in the deployment's env and in the submission form.
 
-From `SurplusBid D - Admin.dc.html`, plus the Standard file's admin console
-(verification queue, dispute console, audit log). Operators land on `/admin`
-after login and can also open any `/lots/:id`.
+## Pages (35 routes)
 
-| Route | Screen |
-| --- | --- |
-| `/admin` | Platform overview |
-| `/admin/verifications` | Verification queue (quick verify / request changes) |
-| `/admin/verifications/:userId` | Verification detail |
-| `/admin/users` | User management (filters, paging, CSV, revoke / reinstate) |
-| `/admin/categories` | Category management (list + create) |
-| `/admin/disputes` | Dispute console |
-| `/admin/disputes/:id` | Dispute resolution detail |
-| `/admin/audit-log` | Audit log (auto-refreshes on page 1) |
-| `/admin/settings` | Platform settings (read-only) |
+```
+Public (Server Components, static / ISR)
+/                         Home: live counts, closing-soon lots, categories
+/about  /how-it-works  /faq  /contact
+/lots                     Catalog: search, category, status, sort, page in the URL
+/lots/[id]                Lot detail: gallery, live price, deposit + bid flow, bid history
 
-### Admin gaps vs. the design
+Auth
+/login                    Email/password, Google, and one-click demo login per role
+/register                 Buyer/seller registration (step 1 of 2)
+/verify-business          Registration document upload with progress (step 2 of 2)
+/verification-status      Review status
 
-- **Disputes can't be listed**: the backend only has `POST /disputes` and
-  `PATCH /disputes/:id/resolve`. The dispute console and detail pages call
-  `GET /disputes?status=` and `GET /disputes/:id` (see `api.adminDisputes` /
-  `api.dispute`) and show a notice while those return 404. Adding the two
-  admin-only routes to the backend makes both screens work unchanged.
-- **Resolving a dispute moves no money**: the backend only records
-  RESOLVED/REJECTED plus a note. Refund, partial-refund and release options
-  became "Resolve in the filer's favour" / "Reject". Disputes have no evidence
-  attachments.
-- **Verification**: there's no user-by-id endpoint (the detail page pages
-  through `GET /admin/users`), and the uploaded document (`verificationDocUrl`)
-  isn't returned. Automated registry/OCR/bank checks don't exist, so they're
-  replaced by a manual review checklist. "Request a document" maps to
-  REJECTED, which lets the applicant resubmit. The backend doesn't store or
-  send a reason, so the page offers a pre-filled email to the applicant instead.
-- **User management**: there's no search endpoint (search filters the current
-  page), no suspend endpoint ("Revoke" sets REJECTED, "Reinstate" sets
-  VERIFIED), and no volume/dispute counts per user.
-- **Categories** can only be created. No rename, nesting, per-category deposit
-  or delete/retire.
-- **Platform settings** live in the backend env (`DEPOSIT_PERCENT`,
-  `PAYMENT_DEADLINE_HOURS`), so the page is read-only. No platform fee or
-  buyer premium exists.
-- **Overview**: charts and top categories are computed from the 50 most recent
-  sold lots (hammer price), since there's no GMV time series. Escrow position was
-  replaced with account counts.
+Buyer (/buyer/*)          overview · bids · watchlist · payments · checkout/[paymentId] · disputes · profile
+Seller (/seller/*)        overview · lots · lots/new · lots/[id] · lots/[id]/edit · earnings · disputes · profile
+Admin (/admin/*)          overview · verifications · users · lots · categories · disputes · audit-logs
 
-## Setup
-
-```bash
-npm install
-cp .env.example .env   # point VITE_API_BASE_URL at your backend
-npm run dev
+Payment                   /payment/success  /payment/cancel
+Utility                   not-found.tsx, error.tsx (root + per role), global-error.tsx
 ```
 
-Runs on `http://localhost:3000` by default — matching `surplusbid-backend`'s
-default `CORS_ORIGIN` and its Google OAuth callback redirect
-(`${CORS_ORIGIN}/oauth-callback`), so no backend config changes are needed for
-local dev with both defaults left as-is.
+## Architecture
 
-## Wiring to the backend
+```
+src/
+  app/
+    (public)/        marketing + catalog, shared header/footer layout
+    (auth)/          split-screen auth layout
+    (dashboard)/     admin | buyer | seller, each with layout, loading and error files
+    payment/         Stripe return pages
+    api/backend/[...path]/route.ts   BFF proxy (attaches bearer token, refreshes it)
+    api/session, api/auth/logout, oauth-callback
+  proxy.ts           route protection + token refresh (Next 16's replacement for middleware)
+  components/
+    ui/              shadcn primitives
+    shared/          DataTable, StatCard, StatusBadge, EmptyState, SearchInput, PaginationBar, skeletons…
+    forms/           RHF field bindings, file dropzone
+    lots/ payments/ auth/ layout/ charts/ dashboard/{admin,buyer,seller,profile,disputes}
+  hooks/             useUrlState, useDebounce, useCountdown, useMounted, useLotsByIds, mutations
+  lib/
+    api/             endpoints (one definition for server and client fetchers), errors, server/client fetchers
+    auth/            token helpers, session (server-only), server actions
+    validation.ts    all Zod schemas
+    query-keys.ts    shared keys for server prefetch and client queries
+  stores/            Zustand stores
+  types/api.ts       typed API responses
+```
 
-Real endpoints used:
+### Auth flow
 
-- `POST /auth/register`, `POST /auth/login`, `POST /auth/logout`
-- `GET /auth/google` → `GET /auth/google/callback` → redirects to `/oauth-callback?accessToken=&refreshToken=`
-- `GET /users/me`, `PATCH /users/me`, `POST /users/verify` (multipart, field `document`)
+1. Login, register and demo-login are **server actions**. They call the backend and put the access
+   and refresh tokens in `httpOnly`, `SameSite=Lax` cookies (`Secure` in production).
+2. `src/proxy.ts` runs before protected routes. It refreshes an expired access token, redirects
+   signed-out users to `/login?next=…`, and sends a user who opens another role's area back to their
+   own dashboard. When `JWT_ACCESS_SECRET` is set it verifies the signature with `jose`.
+3. Role layouts re-check the user against `GET /users/me` on the server (defense in depth) and pass
+   the profile to client components through a context. The backend authorizes every API call anyway.
+4. Browser code never touches tokens. Client requests go to `/api/backend/*`, a route handler that
+   adds the bearer token, retries once after a refresh, and returns a new cookie if one was issued.
 
-Tokens are kept in `localStorage` (`src/lib/api.ts`) and attached as
-`Authorization: Bearer <accessToken>`. A 401 triggers one
-`POST /auth/refresh-token` retry; if that fails, the session-expired overlay
-appears over the current page and signing in returns you to it.
+### Data fetching
 
-The buyer and seller sections also use `/lots/my-listings`, `POST /lots`,
-`PATCH /lots/:id`, `PATCH /lots/:id/publish`, `DELETE /lots/:id`, `/categories`, `/lots`, `/lots/:id/bids`,
-`/lots/:id/deposit`, `/bids/my-bids`, `/payments/*` and `POST /disputes`.
+- Public pages are Server Components using `fetch` with ISR (`revalidate`).
+- Dashboard pages prefetch on the server (`prefetch()` → `HydrationBoundary`) and hand the cache to
+  TanStack Query, so the first paint has data and later interactions are client-side.
+- Optimistic updates: placing a bid, publishing and deleting drafts, verifying users, creating
+  categories.
+- Every filter, sort, search and page is URL state (`useUrlState` on top of `useSearchParams`).
+- API failures surface as Sonner toasts from one `QueryCache`/`MutationCache` handler. Render
+  errors are caught by `error.tsx` boundaries.
 
-## Known gaps vs. the design file
+## Getting started
 
-The design mockup includes some fields and numbers the backend doesn't
-support yet. These were kept visually (per the "match the design" ask) but
-don't do anything real:
+```bash
+cp .env.example .env.local   # fill in the values below
+npm install
+npm run dev                  # http://localhost:3000
+```
 
-- **Forgot / reset password** — `surplusbid-backend` has no
-  `/auth/forgot-password` or `/auth/reset-password` routes. Both pages run a
-  local state machine (form → sent/done) with a `setTimeout` standing in for
-  the API call. See the `NOTE:` comments in `ForgotPasswordPage.tsx` and
-  `ResetPasswordPage.tsx`.
-- **Register's "Your name" field** and **Verify business's entity type /
-  registered address / state / phone fields** — the `User` model only has
-  `companyName` and `taxId`; these inputs are captured in local state but
-  never sent to the API.
-- **Verification status "Next steps"** — "Add card" and "Set alerts" are
-  disabled placeholders; there's no billing or alerts module yet.
-- Multi-file upload with per-file progress/error states from the mockup was
-  simplified to a single file input, matching `POST /users/verify` (which
-  accepts exactly one `document`).
+| Variable | Purpose |
+| --- | --- |
+| `NEXT_PUBLIC_API_BASE_URL` | Backend base URL including `/api/v1` |
+| `NEXT_PUBLIC_SITE_URL` | This frontend's public URL (metadata) |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | `pk_test_…` from the **same** Stripe account as the backend |
+| `NEXT_PUBLIC_DEPOSIT_PERCENT`, `NEXT_PUBLIC_PAYMENT_DEADLINE_HOURS` | Keep in sync with the backend |
+| `JWT_ACCESS_SECRET` | Optional. Same as the backend's, enables signature verification in the proxy |
+| `DEMO_{ADMIN,SELLER,BUYER}_{EMAIL,PASSWORD}` | Server-only credentials for the demo buttons |
 
-## Design system
+Scripts: `npm run build`, `npm run lint` (Biome), `npm run typecheck`.
 
-Colors, type scale, and component shapes are ported 1:1 from the design
-file's CSS custom properties into `src/styles/tokens.css`. Fonts: Inter for
-UI text, JetBrains Mono for all numeric figures (prices, IDs, timestamps).
+## Deploying to Vercel
+
+1. Import the repo in Vercel. The framework preset is detected automatically.
+2. Add every variable from `.env.example` in Project → Settings → Environment Variables.
+3. On the backend (Render), set `CORS_ORIGIN` to the Vercel URL. The Google OAuth callback redirects
+   there. Regular API calls are server-to-server through the BFF, so they don't depend on CORS.
+4. Stripe test cards: `4242 4242 4242 4242`, any future date, any CVC.
+
+## Backend limitations and how the UI handles them
+
+- **No watchlist, holds list, or "my disputes" endpoints.** These are kept per browser in Zustand
+  (persisted) and labelled as such.
+- **No dispute list for admins.** The dispute console resolves by dispute ID and shows decision
+  history from the audit log.
+- **No seller payouts ledger.** Earnings are derived from winning bids and the deposit rule.
+- **Photos only at creation** (max 5). The draft editor can't change them.
+- **Deposit hold confirmation.** `POST /lots/:id/deposit` creates a manual-capture PaymentIntent but
+  doesn't return its `client_secret`, so no card is ever attached to it. If the backend adds
+  `clientSecret` to that response, the deposit dialog confirms the card hold with the Payment Element
+  automatically (`DepositHold.clientSecret` in `src/types/api.ts`).
