@@ -163,7 +163,7 @@ export function DashboardShell({ children, defaultOpen }: { children: React.Reac
         </SidebarFooter>
         <SidebarRail />
       </Sidebar>
-      <SidebarInset>
+      <SidebarInset className="min-w-0">
         <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b bg-background/85 px-4 backdrop-blur">
           <SidebarTrigger className="-ml-1" />
           <Separator orientation="vertical" className="mr-1 data-[orientation=vertical]:h-4" />
@@ -172,12 +172,13 @@ export function DashboardShell({ children, defaultOpen }: { children: React.Reac
             <ThemeToggle />
           </div>
         </header>
-        <main id="main" className="mx-auto w-full max-w-7xl flex-1 p-4 sm:p-6">
+        {/* SidebarInset already renders <main>; this is the skip-link target. */}
+        <div id="main" className="mx-auto w-full max-w-7xl flex-1 p-4 sm:p-6">
           <Suspense>
             <DeniedNotice />
           </Suspense>
           {children}
-        </main>
+        </div>
       </SidebarInset>
     </SidebarProvider>
   );
