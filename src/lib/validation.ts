@@ -125,6 +125,14 @@ export type LotPhotosValues = z.infer<typeof lotPhotosSchema>;
 export type LotPricingValues = z.infer<typeof lotPricingSchema>;
 export type LotEditValues = z.infer<typeof lotEditSchema>;
 
+export const sellerDefaultsSchema = z.object({
+  durationDays: z.number({ error: "Enter a duration" }).int("Whole days only").min(1, "At least 1 day").max(30, "30 days at most"),
+  bidIncrement: z.number({ error: "Enter an increment" }).positive("Must be greater than $0").max(100_000),
+  condition: z.string().trim().min(2, "Describe the usual condition"),
+  startDelayHours: z.number({ error: "Enter a delay" }).int().min(0, "Can't be negative").max(168, "One week at most"),
+});
+export type SellerDefaultsValues = z.infer<typeof sellerDefaultsSchema>;
+
 export const categorySchema = z.object({
   name: z.string().trim().min(2, "Category name must be at least 2 characters").max(40, "Keep it under 40 characters"),
 });
