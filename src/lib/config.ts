@@ -14,3 +14,5 @@ export const PAYMENT_DEADLINE_HOURS = Number(process.env.NEXT_PUBLIC_PAYMENT_DEA
 export const BFF_PREFIX = "/api/backend";
 
 export const depositFor = (startingPriceCents: number) => Math.round(startingPriceCents * (DEPOSIT_PERCENT / 100));
+
+export const SUPPORT_EMAIL = "support@surplusbid.com";
