@@ -12,7 +12,16 @@ const TONES: Record<Tone, string> = {
   live: "bg-success/10 text-success border-success/25",
 };
 
-type AnyStatus = LotStatus | PaymentStatus | BidStatus | VerificationStatus | DisputeStatus | Role | "WATCHING";
+type AnyStatus =
+  | LotStatus
+  | PaymentStatus
+  | BidStatus
+  | VerificationStatus
+  | DisputeStatus
+  | Role
+  | "WATCHING"
+  | "WON"
+  | "LOST";
 
 const MAP: Record<AnyStatus, { tone: Tone; label: string }> = {
   DRAFT: { tone: "neutral", label: "Draft" },
@@ -38,6 +47,8 @@ const MAP: Record<AnyStatus, { tone: Tone; label: string }> = {
   SELLER: { tone: "warning", label: "Seller" },
   ADMIN: { tone: "danger", label: "Admin" },
   WATCHING: { tone: "neutral", label: "Watching" },
+  WON: { tone: "success", label: "Won" },
+  LOST: { tone: "neutral", label: "Lost" },
 };
 
 /** One badge for every status enum in the domain, so colours stay consistent app-wide. */
