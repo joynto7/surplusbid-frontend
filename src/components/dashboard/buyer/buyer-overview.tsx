@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { AlertCircle, ArrowRight, CreditCard, Gavel, Receipt, Trophy, TrendingUp } from "lucide-react";
+import { AlertCircle, ArrowRight, CreditCard, Gavel, Receipt, TrendingUp, Trophy } from "lucide-react";
 import Link from "next/link";
 import { BarTrendChart, DonutChart } from "@/components/charts/lazy";
 import { VerificationBanner } from "@/components/dashboard/verification-banner";

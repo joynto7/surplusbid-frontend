@@ -3,8 +3,8 @@
 import { Heart } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { useMounted } from "@/hooks/use-mounted";
+import { cn } from "@/lib/utils";
 import { useWatchlist } from "@/stores/watchlist-store";
 
 export function WatchButton({ lotId, withLabel = false }: { lotId: string; withLabel?: boolean }) {

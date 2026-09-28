@@ -1,7 +1,7 @@
+import { ChevronLeft } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronLeft } from "lucide-react";
 import { LotPerformance } from "@/components/dashboard/seller/lot-performance";
 import { ApiError } from "@/lib/api/errors";
 import { serverApi } from "@/lib/api/server";

@@ -11,10 +11,10 @@ import { DashboardShell } from "./dashboard-shell";
  * redirected wrong roles; this re-checks against the backend's /users/me
  * (defense in depth) and hands the profile to client components.
  */
-export async function RoleLayout({ role, children }: { role: Role; children: React.ReactNode }) {
+export async function RoleLayout({ area, children }: { area: Role; children: React.ReactNode }) {
   const me = await getCurrentUser();
   if (!me) redirect("/login");
-  if (me.role !== role) redirect(homeForRole(me.role));
+  if (me.role !== area) redirect(homeForRole(me.role));
 
   const sidebarOpen = (await cookies()).get("sidebar_state")?.value !== "false";
 

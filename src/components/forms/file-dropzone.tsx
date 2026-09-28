@@ -8,7 +8,12 @@ import { cn } from "@/lib/utils";
 /** Object URLs for local previews, revoked when the files change or the component unmounts. */
 function usePreviews(files: File[]) {
   const urls = useMemo(() => files.map((f) => (f.type.startsWith("image/") ? URL.createObjectURL(f) : null)), [files]);
-  useEffect(() => () => urls.forEach((u) => u && URL.revokeObjectURL(u)), [urls]);
+  useEffect(
+    () => () => {
+      for (const u of urls) if (u) URL.revokeObjectURL(u);
+    },
+    [urls],
+  );
   return urls;
 }
 

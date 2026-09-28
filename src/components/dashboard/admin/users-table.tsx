@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { Check, Download, FilterX, UserX, Users, X } from "lucide-react";
+import { Check, Download, FilterX, Users, UserX, X } from "lucide-react";
 import { type Column, DataTable } from "@/components/shared/data-table";
 import { PaginationBar } from "@/components/shared/pagination-bar";
 import { StatusBadge } from "@/components/shared/status-badge";

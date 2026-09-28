@@ -2,8 +2,8 @@ import "server-only";
 
 import { cookies } from "next/headers";
 import { cache } from "react";
-import { serverApi } from "@/lib/api/server";
 import { ApiError } from "@/lib/api/errors";
+import { serverApi } from "@/lib/api/server";
 import type { Me } from "@/types/api";
 import { ACCESS_COOKIE, accessCookieOptions, REFRESH_COOKIE, readClaims, refreshCookieOptions } from "./tokens";
 

@@ -74,9 +74,10 @@ export function DisputeConsole() {
                       {(["RESOLVED", "REJECTED"] as const).map((s) => (
                         <label
                           key={s}
+                          htmlFor={`decision-${s}`}
                           className="flex cursor-pointer items-center gap-2 rounded-lg border p-3 text-sm has-data-[state=checked]:border-primary"
                         >
-                          <RadioGroupItem value={s} />
+                          <RadioGroupItem id={`decision-${s}`} value={s} />
                           {s === "RESOLVED" ? "Resolve in claimant's favour" : "Reject claim"}
                         </label>
                       ))}

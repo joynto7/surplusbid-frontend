@@ -13,8 +13,8 @@ import {
 import type { Metadata } from "next";
 import Form from "next/form";
 import Link from "next/link";
-import { EmptyState } from "@/components/shared/empty-state";
 import { LotCard } from "@/components/lots/lot-card";
+import { EmptyState } from "@/components/shared/empty-state";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";

@@ -11,8 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ApiError } from "@/lib/api/errors";
 import { publicApi, serverApi } from "@/lib/api/server";
 import { getClaims } from "@/lib/auth/session";
-import { formatDateTime, formatMoney, lotCode } from "@/lib/format";
-import { isUuid } from "@/lib/format";
+import { formatDateTime, formatMoney, isUuid, lotCode } from "@/lib/format";
 
 /** Deduplicated between generateMetadata and the page within one request. */
 const loadLot = cache(async (id: string) => {
