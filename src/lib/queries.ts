@@ -2,23 +2,10 @@
 
 import { keepPreviousData, queryOptions } from "@tanstack/react-query";
 import { api } from "@/lib/api/client";
+import { qk } from "@/lib/query-keys";
 import type { AdminUserQuery, LotBrowseQuery } from "@/types/api";
 
-/** Query key factory + options, shared by every component that reads the same data. */
-export const qk = {
-  me: ["me"] as const,
-  categories: ["categories"] as const,
-  lots: (q: LotBrowseQuery) => ["lots", q] as const,
-  lot: (id: string) => ["lot", id] as const,
-  bidHistory: (id: string, page: number, limit: number) => ["lot", id, "bids", page, limit] as const,
-  myBids: ["my-bids"] as const,
-  myListings: ["my-listings"] as const,
-  myPayments: ["my-payments"] as const,
-  payment: (id: string) => ["payment", id] as const,
-  adminStats: ["admin", "stats"] as const,
-  adminUsers: (q: AdminUserQuery) => ["admin", "users", q] as const,
-  auditLogs: (q: { page?: number; limit?: number; entityType?: string }) => ["admin", "audit", q] as const,
-};
+export { qk };
 
 export const categoriesQuery = () =>
   queryOptions({ queryKey: qk.categories, queryFn: api.categories, staleTime: 5 * 60_000 });
