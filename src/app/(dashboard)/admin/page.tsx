@@ -1,0 +1,30 @@
+import { HydrationBoundary } from "@tanstack/react-query";
+import type { Metadata } from "next";
+import { AdminOverview } from "@/components/dashboard/admin/admin-overview";
+import { serverApi } from "@/lib/api/server";
+import { ADMIN_USERS_SAMPLE, qk } from "@/lib/query-keys";
+import { prefetch } from "@/lib/server-query";
+
+export const metadata: Metadata = { title: "Admin overview" };
+
+/** Server prefetch of the heavy queries; charts hydrate from the same cache on the client. */
+export default async function AdminHomePage() {
+  const state = await prefetch(
+    (c) => c.prefetchQuery({ queryKey: qk.adminStats, queryFn: () => serverApi.adminStats() }),
+    (c) =>
+      c.prefetchQuery({
+        queryKey: qk.adminUsers(ADMIN_USERS_SAMPLE),
+        queryFn: () => serverApi.adminUsers(ADMIN_USERS_SAMPLE),
+      }),
+    (c) =>
+      c.prefetchQuery({
+        queryKey: qk.auditLogs({ page: 1, limit: 6 }),
+        queryFn: () => serverApi.adminAuditLogs({ page: 1, limit: 6 }),
+      }),
+  );
+  return (
+    <HydrationBoundary state={state}>
+      <AdminOverview />
+    </HydrationBoundary>
+  );
+}

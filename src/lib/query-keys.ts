@@ -46,3 +46,8 @@ export function toLotQuery(p: Partial<Record<keyof typeof LOT_BROWSE_DEFAULTS | 
     sortOrder: sort.sortOrder,
   };
 }
+
+/** Shared by server prefetch and client queries so both use identical keys. */
+export const ADMIN_USERS_SAMPLE = { page: 1, limit: 500 };
+export const VERIFICATION_QUEUE_QUERY = { page: 1, limit: 50, verificationStatus: "PENDING" as const };
+export const AUDIT_PER_PAGE = 15;
