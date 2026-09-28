@@ -107,7 +107,7 @@ export default function VerificationStatusPage() {
               </div>
 
               <div className="vstatus-actions">
-                <Link to="/" className="btn-primary">
+                <Link to={user.role === 'BUYER' ? '/lots' : '/'} className="btn-primary">
                   Browse lots while you wait
                 </Link>
                 <button className="btn-secondary" onClick={() => navigate('/verify-business')}>
@@ -181,15 +181,15 @@ export default function VerificationStatusPage() {
               <div className="vstatus-next-item">
                 <span className="num">3</span>
                 <span className="text">Browse open lots and place your first bid</span>
-                <Link to="/" className="btn-secondary" style={{ padding: '6px 12px', fontSize: 12.5 }}>
+                <Link to={user.role === 'BUYER' ? '/lots' : '/'} className="btn-secondary" style={{ padding: '6px 12px', fontSize: 12.5 }}>
                   View lots
                 </Link>
               </div>
             </div>
 
-            <button className="btn-primary" style={{ marginTop: 22, padding: '12px 22px', fontSize: 14 }} disabled title="Dashboard not built in this milestone">
+            <Link to={user.role === 'ADMIN' ? '/admin' : user.role === 'SELLER' ? '/seller' : '/buyer'} className="btn-primary" style={{ display: 'inline-block', marginTop: 22, padding: '12px 22px', fontSize: 14 }}>
               Go to my dashboard
-            </button>
+            </Link>
           </div>
         )}
       </div>

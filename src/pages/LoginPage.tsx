@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { homeFor, returnTo } from '../lib/routes';
 import { api, ApiError } from '../lib/api';
 import GoogleIcon from '../components/GoogleIcon';
 import './AuthSplit.css';
@@ -20,11 +21,7 @@ export default function LoginPage() {
     setSubmitting(true);
     try {
       const me = await login(email, password);
-      if (me.verificationStatus === 'UNVERIFIED') {
-        navigate('/verify-business');
-      } else {
-        navigate('/verification-status');
-      }
+      navigate(returnTo.take() ?? homeFor(me));
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Something went wrong. Please try again.');
     } finally {
