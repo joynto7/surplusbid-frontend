@@ -87,7 +87,6 @@ export const lotPhotosSchema = z.object({
         .refine((f) => IMAGE_TYPES.includes(f.type), "Photos must be JPG, PNG or WebP")
         .refine((f) => f.size <= MAX_FILE_BYTES, "Each photo must be 5 MB or smaller"),
     )
-    .min(1, "Add at least one photo")
     .max(MAX_LOT_IMAGES, `Up to ${MAX_LOT_IMAGES} photos`),
 });
 
@@ -126,7 +125,11 @@ export type LotPricingValues = z.infer<typeof lotPricingSchema>;
 export type LotEditValues = z.infer<typeof lotEditSchema>;
 
 export const sellerDefaultsSchema = z.object({
-  durationDays: z.number({ error: "Enter a duration" }).int("Whole days only").min(1, "At least 1 day").max(30, "30 days at most"),
+  durationDays: z
+    .number({ error: "Enter a duration" })
+    .int("Whole days only")
+    .min(1, "At least 1 day")
+    .max(30, "30 days at most"),
   bidIncrement: z.number({ error: "Enter an increment" }).positive("Must be greater than $0").max(100_000),
   condition: z.string().trim().min(2, "Describe the usual condition"),
   startDelayHours: z.number({ error: "Enter a delay" }).int().min(0, "Can't be negative").max(168, "One week at most"),
