@@ -153,7 +153,6 @@ function BuyerBidForm({ lot, minimum }: { lot: Lot; minimum: number }) {
   const form = useForm<BidValues>({
     resolver: zodResolver(bidSchema(minimum)),
     values: { amount: minimum / 100 },
-    resetOptions: { keepDirtyValues: true },
   });
 
   const submit = (values: BidValues) => {
@@ -170,7 +169,8 @@ function BuyerBidForm({ lot, minimum }: { lot: Lot; minimum: number }) {
           setDepositOpen(true);
         }
       },
-      onSuccess: () => form.reset({ amount: (cents + lot.bidIncrementCents) / 100 }),
+      // The next minimum arrives via `values` once the lot refetches.
+      onSuccess: () => form.reset({ amount: (cents + lot.bidIncrementCents) / 100 }, { keepDefaultValues: false }),
     });
   };
 
