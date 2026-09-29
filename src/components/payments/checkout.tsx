@@ -1,9 +1,9 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ArrowRight, Lock, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { LuArrowRight, LuLock, LuShieldCheck } from "react-icons/lu";
 import { StripeConfirm } from "@/components/payments/stripe-confirm";
 import { Countdown } from "@/components/shared/countdown";
 import { StatusBadge } from "@/components/shared/status-badge";
@@ -76,7 +76,7 @@ export function Checkout({ payment, lot }: { payment: Payment; lot: Lot | null }
             </span>
           </div>
           <p className="flex gap-2 text-muted-foreground text-xs">
-            <ShieldCheck className="size-4 shrink-0" aria-hidden />
+            <LuShieldCheck className="size-4 shrink-0" aria-hidden />
             If the balance isn&apos;t paid by the deadline, the deposit is forfeited and the lot goes to the next
             bidder.
           </p>
@@ -86,7 +86,7 @@ export function Checkout({ payment, lot }: { payment: Payment; lot: Lot | null }
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Lock className="size-4" aria-hidden /> Secure payment
+            <LuLock className="size-4" aria-hidden /> Secure payment
           </CardTitle>
           <CardDescription>Card details are handled by Stripe and never reach SurplusBid.</CardDescription>
         </CardHeader>
@@ -125,7 +125,7 @@ export function Checkout({ payment, lot }: { payment: Payment; lot: Lot | null }
                 <li>2. You pay the remaining {formatMoney(payment.amountCents)} by card.</li>
               </ol>
               <Button size="lg" className="w-full" onClick={() => initiate.mutate()} disabled={initiate.isPending}>
-                {initiate.isPending ? <Spinner /> : <ArrowRight />} Continue to payment
+                {initiate.isPending ? <Spinner /> : <LuArrowRight />} Continue to payment
               </Button>
               {initiate.isSuccess && !initiate.data.clientSecret && (
                 <Alert variant="destructive">

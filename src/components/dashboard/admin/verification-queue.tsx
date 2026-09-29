@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { BadgeCheck, Clock, Inbox } from "lucide-react";
+import { LuBadgeCheck, LuClock, LuInbox } from "react-icons/lu";
 import { EmptyState } from "@/components/shared/empty-state";
 import { TableSkeleton } from "@/components/shared/skeletons";
 import { StatusBadge } from "@/components/shared/status-badge";
@@ -20,7 +20,7 @@ export function VerificationQueue() {
   if (!items.length) {
     return (
       <EmptyState
-        icon={Inbox}
+        icon={LuInbox}
         title="Queue is clear"
         description="No businesses are waiting for verification. New submissions appear here automatically."
       />
@@ -30,7 +30,7 @@ export function VerificationQueue() {
   return (
     <div className="space-y-3">
       <p className="flex items-center gap-2 text-muted-foreground text-sm">
-        <Clock className="size-4" aria-hidden /> {items.length} waiting · oldest first
+        <LuClock className="size-4" aria-hidden /> {items.length} waiting · oldest first
       </p>
       <ul className="grid gap-3 md:grid-cols-2">
         {items.map((u) => (
@@ -49,7 +49,7 @@ export function VerificationQueue() {
                 </div>
                 <div className="flex items-center justify-between gap-3">
                   <p className="text-muted-foreground text-xs">
-                    <BadgeCheck className="mr-1 inline size-3.5" aria-hidden />
+                    <LuBadgeCheck className="mr-1 inline size-3.5" aria-hidden />
                     Registered {formatDate(u.createdAt)} · waiting {formatRelative(u.createdAt).replace(" ago", "")}
                   </p>
                   <VerifyActions user={u} />

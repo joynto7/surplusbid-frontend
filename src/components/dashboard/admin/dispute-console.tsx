@@ -2,8 +2,8 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
-import { Gavel, Scale } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
+import { LuGavel, LuScale } from "react-icons/lu";
 import { TextareaField, TextField } from "@/components/forms/fields";
 import { EmptyState } from "@/components/shared/empty-state";
 import { StatCard } from "@/components/shared/stat-card";
@@ -45,7 +45,7 @@ export function DisputeConsole() {
         <StatCard
           label="Open disputes"
           value={stats.data?.openDisputes ?? "—"}
-          icon={Scale}
+          icon={LuScale}
           tone="danger"
           hint="Open or under review"
         />
@@ -94,7 +94,7 @@ export function DisputeConsole() {
                 placeholder="What was decided and why. Both parties can see this."
               />
               <Button type="submit" disabled={resolve.isPending}>
-                {resolve.isPending ? <Spinner /> : <Gavel />} Record decision
+                {resolve.isPending ? <Spinner /> : <LuGavel />} Record decision
               </Button>
             </form>
           </CardContent>
@@ -111,7 +111,7 @@ export function DisputeConsole() {
             <Spinner />
           ) : !history.data?.items.length ? (
             <EmptyState
-              icon={Scale}
+              icon={LuScale}
               title="No decisions yet"
               description="Resolved and rejected disputes appear here."
             />

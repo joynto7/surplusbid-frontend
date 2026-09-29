@@ -2,10 +2,10 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, ArrowRight, Check, Rocket, Save } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { LuArrowLeft, LuArrowRight, LuCheck, LuRocket, LuSave } from "react-icons/lu";
 import { toast } from "sonner";
 import { FileDropzone } from "@/components/forms/file-dropzone";
 import { Button } from "@/components/ui/button";
@@ -50,7 +50,7 @@ function Stepper({ step }: { step: number }) {
           <div className={cn("h-1.5 rounded-full", i <= step ? "bg-primary" : "bg-muted")} />
           <div className="hidden sm:block">
             <p className={cn("font-medium text-sm", i === step ? "text-foreground" : "text-muted-foreground")}>
-              {i < step && <Check className="mr-1 inline size-3.5 text-primary" />}
+              {i < step && <LuCheck className="mr-1 inline size-3.5 text-primary" />}
               {s.title}
             </p>
             <p className="text-muted-foreground text-xs">{s.description}</p>
@@ -135,10 +135,10 @@ function StepCard({
         <CardContent className="py-6">{children}</CardContent>
         <CardFooter className="justify-between border-t">
           <Button type="button" variant="ghost" disabled={step === 0} onClick={() => setStep(step - 1)}>
-            <ArrowLeft /> Back
+            <LuArrowLeft /> Back
           </Button>
           <Button type="submit">
-            {nextLabel} <ArrowRight />
+            {nextLabel} <LuArrowRight />
           </Button>
         </CardFooter>
       </form>
@@ -336,14 +336,14 @@ function ReviewStep() {
       </CardContent>
       <CardFooter className="flex-wrap justify-between gap-2 border-t">
         <Button type="button" variant="ghost" onClick={() => setStep(2)} disabled={busy}>
-          <ArrowLeft /> Back
+          <LuArrowLeft /> Back
         </Button>
         <div className="flex gap-2">
           <Button variant="outline" onClick={() => create(false)} disabled={!ready || busy}>
-            {busy && !publishing ? <Spinner /> : <Save />} Save as draft
+            {busy && !publishing ? <Spinner /> : <LuSave />} Save as draft
           </Button>
           <Button onClick={() => create(true)} disabled={!ready || busy}>
-            {publishing ? <Spinner /> : <Rocket />} Create & publish
+            {publishing ? <Spinner /> : <LuRocket />} Create & publish
           </Button>
         </div>
       </CardFooter>

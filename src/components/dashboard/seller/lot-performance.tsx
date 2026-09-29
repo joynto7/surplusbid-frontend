@@ -1,8 +1,8 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { Copy, Eye, Gavel, Pencil, Rocket, Target, Timer, TrendingUp } from "lucide-react";
 import Link from "next/link";
+import { LuCopy, LuEye, LuGavel, LuPencil, LuRocket, LuTarget, LuTimer, LuTrendingUp } from "react-icons/lu";
 import { AreaTrendChart } from "@/components/charts/lazy";
 import { BidHistory } from "@/components/lots/bid-history";
 import { Countdown } from "@/components/shared/countdown";
@@ -64,24 +64,24 @@ export function LotPerformance({ initialLot }: { initialLot: Lot }) {
             <>
               <Button variant="outline" asChild>
                 <Link href={`/seller/lots/${lot.id}/edit`}>
-                  <Pencil /> Edit
+                  <LuPencil /> Edit
                 </Link>
               </Button>
               <Button onClick={() => publish.mutate(lot.id)} disabled={publish.isPending}>
-                {publish.isPending ? <Spinner /> : <Rocket />} Publish
+                {publish.isPending ? <Spinner /> : <LuRocket />} Publish
               </Button>
             </>
           )}
           {closed && (
             <Button variant="outline" asChild>
               <Link href={`/seller/lots/new?from=${lot.id}`}>
-                <Copy /> Relist
+                <LuCopy /> Relist
               </Link>
             </Button>
           )}
           <Button variant="ghost" asChild>
             <Link href={`/lots/${lot.id}`}>
-              <Eye /> Preview
+              <LuEye /> Preview
             </Link>
           </Button>
         </div>
@@ -91,27 +91,27 @@ export function LotPerformance({ initialLot }: { initialLot: Lot }) {
         <StatCard
           label="Current bid"
           value={formatMoney(current)}
-          icon={TrendingUp}
+          icon={LuTrendingUp}
           hint={`Started at ${formatMoney(lot.startingPriceCents)}`}
         />
         <StatCard
           label="Bids"
           value={history.data?.meta.total ?? "—"}
-          icon={Gavel}
+          icon={LuGavel}
           tone="success"
           hint={`Increment ${formatMoney(lot.bidIncrementCents)}`}
         />
         <StatCard
           label="Reserve"
           value={formatMoney(reserve)}
-          icon={Target}
+          icon={LuTarget}
           tone={(current ?? 0) >= reserve ? "success" : "warning"}
           hint={(current ?? 0) >= reserve ? "Reserve met" : `${reserveProgress}% of reserve`}
         />
         <StatCard
           label={lot.status === "LIVE" ? "Time left" : "Closed"}
           value={lot.status === "LIVE" ? <Countdown endTime={lot.endTime} /> : formatDateTime(lot.endTime)}
-          icon={Timer}
+          icon={LuTimer}
           tone="danger"
         />
       </StatGrid>

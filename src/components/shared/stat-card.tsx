@@ -1,4 +1,4 @@
-import type { LucideIcon } from "lucide-react";
+import type { IconType } from "react-icons";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 interface StatCardProps {
   label: string;
   value: React.ReactNode;
-  icon: LucideIcon;
+  icon: IconType;
   hint?: React.ReactNode;
   tone?: "primary" | "success" | "warning" | "danger";
 }

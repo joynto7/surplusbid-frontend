@@ -1,8 +1,8 @@
-import { ChevronLeft, Layers, Package, Tag, Wrench } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { cache } from "react";
+import { LuChevronLeft, LuLayers, LuPackage, LuTag, LuWrench } from "react-icons/lu";
 import { BidHistory } from "@/components/lots/bid-history";
 import { BidPanel } from "@/components/lots/bid-panel";
 import { LotGallery } from "@/components/lots/lot-gallery";
@@ -54,17 +54,17 @@ export default async function LotDetailPage({ params }: PageProps<"/lots/[id]">)
 
   const category = categories.find((c) => c.id === lot.categoryId);
   const specs = [
-    { icon: Tag, label: "Category", value: category?.name ?? "—" },
-    { icon: Wrench, label: "Condition", value: lot.condition },
-    { icon: Layers, label: "Quantity", value: lot.quantity.toLocaleString() },
-    { icon: Package, label: "Lot code", value: lotCode(lot.id) },
+    { icon: LuTag, label: "Category", value: category?.name ?? "—" },
+    { icon: LuWrench, label: "Condition", value: lot.condition },
+    { icon: LuLayers, label: "Quantity", value: lot.quantity.toLocaleString() },
+    { icon: LuPackage, label: "Lot code", value: lotCode(lot.id) },
   ];
 
   return (
     <div className="mx-auto max-w-7xl space-y-6 px-4 py-8 sm:px-6">
       <nav aria-label="Breadcrumb" className="flex items-center justify-between gap-2">
         <Link href="/lots" className="flex items-center gap-1 text-muted-foreground text-sm hover:text-foreground">
-          <ChevronLeft className="size-4" /> All auctions
+          <LuChevronLeft className="size-4" /> All auctions
         </Link>
         {(!claims || claims.role === "BUYER") && <WatchButton lotId={lot.id} withLabel />}
       </nav>

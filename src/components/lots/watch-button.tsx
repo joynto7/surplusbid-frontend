@@ -1,6 +1,6 @@
 "use client";
 
-import { Heart } from "lucide-react";
+import { LuHeart } from "react-icons/lu";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { useMounted } from "@/hooks/use-mounted";
@@ -25,7 +25,7 @@ export function WatchButton({ lotId, withLabel = false }: { lotId: string; withL
         toast.success(watching ? "Removed from watchlist" : "Added to watchlist");
       }}
     >
-      <Heart className={cn(watching && "fill-destructive text-destructive")} />
+      <LuHeart className={cn(watching && "fill-destructive text-destructive")} />
       {withLabel && (watching ? "Watching" : "Watch")}
     </Button>
   );

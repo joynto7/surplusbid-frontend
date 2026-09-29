@@ -1,7 +1,7 @@
 "use client";
 
-import { ShieldAlert, X } from "lucide-react";
 import Link from "next/link";
+import { LuShieldAlert, LuX } from "react-icons/lu";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { useMounted } from "@/hooks/use-mounted";
@@ -27,7 +27,7 @@ export function VerificationBanner() {
 
   return (
     <Alert className="border-warning/40 bg-warning/5">
-      <ShieldAlert className="text-warning" />
+      <LuShieldAlert className="text-warning" />
       <AlertTitle>{copy.title}</AlertTitle>
       <AlertDescription className="flex flex-wrap items-center gap-3">
         <span>
@@ -43,7 +43,7 @@ export function VerificationBanner() {
         aria-label="Dismiss"
         className="absolute top-2 right-2 rounded p-1 text-muted-foreground hover:text-foreground"
       >
-        <X className="size-4" />
+        <LuX className="size-4" />
       </button>
     </Alert>
   );

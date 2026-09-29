@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { Download, ScrollText } from "lucide-react";
+import { LuDownload, LuScrollText } from "react-icons/lu";
 import { DonutChart } from "@/components/charts/lazy";
 import { type Column, DataTable } from "@/components/shared/data-table";
 import { PaginationBar } from "@/components/shared/pagination-bar";
@@ -146,7 +146,7 @@ export function AuditLogView() {
           </TabsList>
         </Tabs>
         <Button variant="outline" onClick={exportCsv} disabled={!logs.data?.items.length}>
-          <Download /> Export CSV
+          <LuDownload /> Export CSV
         </Button>
       </div>
       <DataTable
@@ -156,7 +156,11 @@ export function AuditLogView() {
         dimmed={logs.isPlaceholderData}
         getRowId={(l) => l.id}
         caption="Audit log"
-        empty={{ icon: ScrollText, title: "No audit entries", description: "Operator actions will be recorded here." }}
+        empty={{
+          icon: LuScrollText,
+          title: "No audit entries",
+          description: "Operator actions will be recorded here.",
+        }}
       />
       {logs.data && (
         <PaginationBar

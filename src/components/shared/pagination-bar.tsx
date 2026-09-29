@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 import { Button } from "@/components/ui/button";
 
 /** Page controls for URL-driven lists. `onPage` writes `?page=` via useUrlState. */
@@ -25,10 +25,10 @@ export function PaginationBar({
       </p>
       <div className="flex gap-2">
         <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => onPage(page - 1)}>
-          <ChevronLeft /> Previous
+          <LuChevronLeft /> Previous
         </Button>
         <Button variant="outline" size="sm" disabled={page >= totalPages} onClick={() => onPage(page + 1)}>
-          Next <ChevronRight />
+          Next <LuChevronRight />
         </Button>
       </div>
     </nav>

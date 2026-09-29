@@ -1,8 +1,8 @@
 "use client";
 
-import { AlertTriangle, RotateCcw } from "lucide-react";
 import Link from "next/link";
 import { useEffect } from "react";
+import { LuRotateCcw, LuTriangleAlert } from "react-icons/lu";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 
@@ -26,7 +26,7 @@ export function ErrorView({
   return (
     <div role="alert" className="mx-auto flex max-w-md flex-col items-center gap-4 py-16 text-center">
       <span className="flex size-12 items-center justify-center rounded-full bg-destructive/10 text-destructive">
-        <AlertTriangle className="size-6" aria-hidden />
+        <LuTriangleAlert className="size-6" aria-hidden />
       </span>
       <div className="space-y-1">
         <h2 className="font-semibold text-xl">{title}</h2>
@@ -37,7 +37,7 @@ export function ErrorView({
       </div>
       <div className="flex gap-2">
         <Button onClick={reset}>
-          <RotateCcw /> Try again
+          <LuRotateCcw /> Try again
         </Button>
         <Button variant="outline" asChild>
           <Link href={homeHref}>Go back</Link>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { Check, Download, FilterX, Users, UserX, X } from "lucide-react";
+import { LuCheck, LuDownload, LuFilterX, LuUsers, LuUserX, LuX } from "react-icons/lu";
 import { type Column, DataTable } from "@/components/shared/data-table";
 import { PaginationBar } from "@/components/shared/pagination-bar";
 import { StatusBadge } from "@/components/shared/status-badge";
@@ -31,7 +31,7 @@ export function VerifyActions({ user, compact }: { user: AdminUser; compact?: bo
     <div className="flex justify-end gap-1.5">
       {user.verificationStatus !== "VERIFIED" && (
         <Button size="sm" disabled={busy} onClick={() => verify.mutate({ id: user.id, status: "VERIFIED" })}>
-          <Check /> {compact ? "" : "Verify"}
+          <LuCheck /> {compact ? "" : "Verify"}
         </Button>
       )}
       {user.verificationStatus !== "REJECTED" && (
@@ -41,7 +41,7 @@ export function VerifyActions({ user, compact }: { user: AdminUser; compact?: bo
           disabled={busy}
           onClick={() => verify.mutate({ id: user.id, status: "REJECTED" })}
         >
-          {user.verificationStatus === "VERIFIED" ? <UserX /> : <X />}{" "}
+          {user.verificationStatus === "VERIFIED" ? <LuUserX /> : <LuX />}{" "}
           {compact ? "" : user.verificationStatus === "VERIFIED" ? "Revoke" : "Reject"}
         </Button>
       )}
@@ -123,11 +123,11 @@ export function UsersTable() {
         </Select>
         {filtered && (
           <Button variant="ghost" onClick={() => set({ role: "all", status: "all" })}>
-            <FilterX /> Clear
+            <LuFilterX /> Clear
           </Button>
         )}
         <Button variant="outline" className="ml-auto" onClick={exportCsv} disabled={!users.data?.items.length}>
-          <Download /> Export page
+          <LuDownload /> Export page
         </Button>
       </div>
       <DataTable
@@ -137,7 +137,7 @@ export function UsersTable() {
         dimmed={users.isPlaceholderData}
         getRowId={(u) => u.id}
         caption="Registered businesses"
-        empty={{ icon: Users, title: "No users match these filters", description: "Try a different role or status." }}
+        empty={{ icon: LuUsers, title: "No users match these filters", description: "Try a different role or status." }}
       />
       {users.data && (
         <PaginationBar

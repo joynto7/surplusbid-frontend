@@ -1,28 +1,28 @@
+import type { IconType } from "react-icons";
 import {
-  BadgeCheck,
-  Banknote,
-  FileSearch,
-  Gavel,
-  Heart,
-  LayoutDashboard,
-  ListChecks,
-  type LucideIcon,
-  Package,
-  PackagePlus,
-  Receipt,
-  Scale,
-  ScrollText,
-  Search,
-  Tags,
-  UserCog,
-  Users,
-} from "lucide-react";
+  LuBadgeCheck,
+  LuBanknote,
+  LuFileSearch,
+  LuGavel,
+  LuHeart,
+  LuLayoutDashboard,
+  LuListChecks,
+  LuPackage,
+  LuPackagePlus,
+  LuReceipt,
+  LuScale,
+  LuScrollText,
+  LuSearch,
+  LuTags,
+  LuUserCog,
+  LuUsers,
+} from "react-icons/lu";
 import type { Role } from "@/types/api";
 
 export interface NavItem {
   href: string;
   label: string;
-  icon: LucideIcon;
+  icon: IconType;
   /** Match only the exact path (for the overview item). */
   exact?: boolean;
 }
@@ -38,18 +38,18 @@ export const NAV: Record<Role, NavSection[]> = {
     {
       label: "Buying",
       items: [
-        { href: "/buyer", label: "Overview", icon: LayoutDashboard, exact: true },
-        { href: "/lots", label: "Browse auctions", icon: Search },
-        { href: "/buyer/bids", label: "My bids", icon: Gavel },
-        { href: "/buyer/watchlist", label: "Watchlist", icon: Heart },
-        { href: "/buyer/payments", label: "Payments", icon: Receipt },
+        { href: "/buyer", label: "Overview", icon: LuLayoutDashboard, exact: true },
+        { href: "/lots", label: "Browse auctions", icon: LuSearch },
+        { href: "/buyer/bids", label: "My bids", icon: LuGavel },
+        { href: "/buyer/watchlist", label: "Watchlist", icon: LuHeart },
+        { href: "/buyer/payments", label: "Payments", icon: LuReceipt },
       ],
     },
     {
       label: "Account",
       items: [
-        { href: "/buyer/disputes", label: "Disputes", icon: Scale },
-        { href: "/buyer/profile", label: "Profile & settings", icon: UserCog },
+        { href: "/buyer/disputes", label: "Disputes", icon: LuScale },
+        { href: "/buyer/profile", label: "Profile & settings", icon: LuUserCog },
       ],
     },
   ],
@@ -57,17 +57,17 @@ export const NAV: Record<Role, NavSection[]> = {
     {
       label: "Selling",
       items: [
-        { href: "/seller", label: "Overview", icon: LayoutDashboard, exact: true },
-        { href: "/seller/lots", label: "My listings", icon: Package },
-        { href: "/seller/lots/new", label: "Create lot", icon: PackagePlus, exact: true },
-        { href: "/seller/earnings", label: "Earnings", icon: Banknote },
+        { href: "/seller", label: "Overview", icon: LuLayoutDashboard, exact: true },
+        { href: "/seller/lots", label: "My listings", icon: LuPackage },
+        { href: "/seller/lots/new", label: "Create lot", icon: LuPackagePlus, exact: true },
+        { href: "/seller/earnings", label: "Earnings", icon: LuBanknote },
       ],
     },
     {
       label: "Account",
       items: [
-        { href: "/seller/disputes", label: "Disputes", icon: Scale },
-        { href: "/seller/profile", label: "Profile & availability", icon: UserCog },
+        { href: "/seller/disputes", label: "Disputes", icon: LuScale },
+        { href: "/seller/profile", label: "Profile & availability", icon: LuUserCog },
       ],
     },
   ],
@@ -75,19 +75,19 @@ export const NAV: Record<Role, NavSection[]> = {
     {
       label: "Operations",
       items: [
-        { href: "/admin", label: "Overview", icon: LayoutDashboard, exact: true },
-        { href: "/admin/verifications", label: "Verification queue", icon: BadgeCheck },
-        { href: "/admin/users", label: "Users", icon: Users },
-        { href: "/admin/lots", label: "Lots", icon: ListChecks },
-        { href: "/admin/categories", label: "Categories", icon: Tags },
+        { href: "/admin", label: "Overview", icon: LuLayoutDashboard, exact: true },
+        { href: "/admin/verifications", label: "Verification queue", icon: LuBadgeCheck },
+        { href: "/admin/users", label: "Users", icon: LuUsers },
+        { href: "/admin/lots", label: "Lots", icon: LuListChecks },
+        { href: "/admin/categories", label: "Categories", icon: LuTags },
       ],
     },
     {
       label: "Oversight",
       items: [
-        { href: "/admin/disputes", label: "Disputes", icon: Scale },
-        { href: "/admin/audit-logs", label: "Audit log & reports", icon: ScrollText },
-        { href: "/lots", label: "Public catalog", icon: FileSearch },
+        { href: "/admin/disputes", label: "Disputes", icon: LuScale },
+        { href: "/admin/audit-logs", label: "Audit log & reports", icon: LuScrollText },
+        { href: "/lots", label: "Public catalog", icon: LuFileSearch },
       ],
     },
   ],

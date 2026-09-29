@@ -1,8 +1,8 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { Gavel } from "lucide-react";
 import Link from "next/link";
+import { LuGavel } from "react-icons/lu";
 import { Countdown } from "@/components/shared/countdown";
 import { type Column, DataTable } from "@/components/shared/data-table";
 import { PaginationBar } from "@/components/shared/pagination-bar";
@@ -128,7 +128,7 @@ export function MyBids() {
         loading={bids.isPending}
         caption="Your bids by lot"
         empty={{
-          icon: Gavel,
+          icon: LuGavel,
           title: values.tab === "all" && !values.q ? "You haven't bid yet" : "Nothing in this view",
           description:
             values.tab === "all" && !values.q

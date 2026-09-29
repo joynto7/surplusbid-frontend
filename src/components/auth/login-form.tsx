@@ -1,10 +1,10 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LogIn } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useTransition } from "react";
 import { useForm } from "react-hook-form";
+import { LuLogIn } from "react-icons/lu";
 import { toast } from "sonner";
 import { TextField } from "@/components/forms/fields";
 import { Button } from "@/components/ui/button";
@@ -63,7 +63,7 @@ export function LoginForm() {
           disabled={pending}
         />
         <Button type="submit" size="lg" className="w-full" disabled={pending}>
-          {pending ? <Spinner /> : <LogIn />} Sign in
+          {pending ? <Spinner /> : <LuLogIn />} Sign in
         </Button>
       </FieldGroup>
     </form>

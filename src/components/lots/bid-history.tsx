@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { History } from "lucide-react";
+import { LuHistory } from "react-icons/lu";
 import { EmptyState } from "@/components/shared/empty-state";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,7 +17,7 @@ export function BidHistory({ lotId, live }: { lotId: string; live: boolean }) {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-base">
-          <History className="size-4" aria-hidden /> Bid history
+          <LuHistory className="size-4" aria-hidden /> Bid history
         </CardTitle>
         <CardDescription>
           {data ? `${data.meta.total} bid${data.meta.total === 1 ? "" : "s"}` : "Loading…"}
@@ -32,7 +32,7 @@ export function BidHistory({ lotId, live }: { lotId: string; live: boolean }) {
             ))}
           </div>
         ) : !data?.items.length ? (
-          <EmptyState icon={History} title="No bids yet" description="Be the first to bid on this lot." />
+          <EmptyState icon={LuHistory} title="No bids yet" description="Be the first to bid on this lot." />
         ) : (
           <ol className="divide-y" aria-live="polite">
             {data.items.map((bid) => (

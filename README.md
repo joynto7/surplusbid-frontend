@@ -17,7 +17,7 @@ It consumes the [surplusbid-backend](https://github.com/joynto7/surplusbid-backe
 | Concern | Choice |
 | --- | --- |
 | Framework | Next.js 16 (App Router, React 19, React Compiler), TypeScript strict |
-| UI | Tailwind CSS v4, shadcn/ui (Radix primitives), Lucide icons, next-themes (dark mode) |
+| UI | Tailwind CSS v4, shadcn/ui (Radix primitives), react-icons, next-themes (dark mode) |
 | Server state | TanStack Query v5 with server prefetch + `HydrationBoundary` |
 | Client state | Zustand (watchlist, lot-wizard draft, UI preferences, deposit memory) |
 | Forms | React Hook Form + Zod v4 (schemas mirror the backend's Zod rules) |

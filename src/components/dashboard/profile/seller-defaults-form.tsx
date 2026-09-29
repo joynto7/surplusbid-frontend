@@ -1,9 +1,9 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CalendarClock } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { LuCalendarClock } from "react-icons/lu";
 import { toast } from "sonner";
 import { TextField } from "@/components/forms/fields";
 import { Button } from "@/components/ui/button";
@@ -40,7 +40,7 @@ export function SellerDefaultsForm() {
       >
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <CalendarClock className="size-4" aria-hidden /> Availability & auction defaults
+            <LuCalendarClock className="size-4" aria-hidden /> Availability & auction defaults
           </CardTitle>
           <CardDescription>
             When your lots usually open and how long they run. Saved on this device and used to prefill the lot wizard.

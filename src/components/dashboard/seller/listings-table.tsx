@@ -1,9 +1,19 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { BarChart3, Copy, Eye, MoreHorizontal, Package, PackagePlus, Pencil, Rocket, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import {
+  LuChartColumn,
+  LuCopy,
+  LuEllipsis,
+  LuEye,
+  LuPackage,
+  LuPackagePlus,
+  LuPencil,
+  LuRocket,
+  LuTrash2,
+} from "react-icons/lu";
 import { Countdown } from "@/components/shared/countdown";
 import { type Column, DataTable } from "@/components/shared/data-table";
 import { LotImage } from "@/components/shared/lot-image";
@@ -110,37 +120,37 @@ export function ListingsTable() {
               onClick={() => publish.mutate(l.id)}
               disabled={publish.isPending && publish.variables === l.id}
             >
-              <Rocket /> Publish
+              <LuRocket /> Publish
             </Button>
           )}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon-sm" aria-label={`Actions for ${l.title}`}>
-                <MoreHorizontal />
+                <LuEllipsis />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem asChild>
                 <Link href={`/seller/lots/${l.id}`}>
-                  <BarChart3 /> Performance
+                  <LuChartColumn /> Performance
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href={`/lots/${l.id}`}>
-                  <Eye /> Preview as buyer
+                  <LuEye /> Preview as buyer
                 </Link>
               </DropdownMenuItem>
               {l.status === "DRAFT" && (
                 <DropdownMenuItem asChild>
                   <Link href={`/seller/lots/${l.id}/edit`}>
-                    <Pencil /> Edit draft
+                    <LuPencil /> Edit draft
                   </Link>
                 </DropdownMenuItem>
               )}
               {["SOLD", "UNSOLD", "ENDED", "CANCELLED"].includes(l.status) && (
                 <DropdownMenuItem asChild>
                   <Link href={`/seller/lots/new?from=${l.id}`}>
-                    <Copy /> Relist
+                    <LuCopy /> Relist
                   </Link>
                 </DropdownMenuItem>
               )}
@@ -148,7 +158,7 @@ export function ListingsTable() {
                 <>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem variant="destructive" onSelect={() => setConfirmDelete(l)}>
-                    <Trash2 /> Delete draft
+                    <LuTrash2 /> Delete draft
                   </DropdownMenuItem>
                 </>
               )}
@@ -193,7 +203,7 @@ export function ListingsTable() {
         getRowId={(l) => l.id}
         caption="Your listings"
         empty={{
-          icon: all.length ? Package : PackagePlus,
+          icon: all.length ? LuPackage : LuPackagePlus,
           title: all.length ? "No lots in this view" : "No listings yet",
           description: all.length
             ? "Try another status or clear the search."

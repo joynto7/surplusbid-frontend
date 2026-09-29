@@ -1,8 +1,8 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Mail, Send } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { LuMail, LuSend } from "react-icons/lu";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { FieldGroup } from "@/components/ui/field";
@@ -55,10 +55,10 @@ export function ContactForm() {
         />
         <div className="flex flex-wrap items-center gap-3">
           <Button type="submit">
-            <Send /> Send message
+            <LuSend /> Send message
           </Button>
           <p className="flex items-center gap-1.5 text-muted-foreground text-sm">
-            <Mail className="size-4" aria-hidden /> Opens in your email app
+            <LuMail className="size-4" aria-hidden /> Opens in your email app
           </p>
         </div>
       </FieldGroup>

@@ -19,7 +19,7 @@ export default function LoginPage() {
     <div className="space-y-6">
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Welcome back 👋</CardTitle>
+          <CardTitle className="text-2xl">Welcome back</CardTitle>
           <CardDescription>Log in to your account</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

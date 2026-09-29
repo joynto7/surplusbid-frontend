@@ -1,10 +1,10 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Upload } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { LuUpload } from "react-icons/lu";
 import { toast } from "sonner";
 import { FileDropzone } from "@/components/forms/file-dropzone";
 import { Button } from "@/components/ui/button";
@@ -90,7 +90,7 @@ export function VerificationForm() {
           </div>
         )}
         <Button type="submit" size="lg" className="w-full" disabled={uploading}>
-          <Upload /> Submit for review
+          <LuUpload /> Submit for review
         </Button>
       </FieldGroup>
     </form>

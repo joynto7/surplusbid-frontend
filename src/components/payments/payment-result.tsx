@@ -1,9 +1,9 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { CheckCircle2, Clock, Receipt, XCircle } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { LuCircleCheck, LuCircleX, LuClock, LuReceipt } from "react-icons/lu";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -37,7 +37,7 @@ export function PaymentSuccess({ paymentId }: { paymentId: string }) {
             settled ? "bg-success/10 text-success" : "bg-warning/10 text-warning",
           )}
         >
-          {settled ? <CheckCircle2 className="size-7" /> : <Clock className="size-7" />}
+          {settled ? <LuCircleCheck className="size-7" /> : <LuClock className="size-7" />}
         </span>
         <CardTitle className="text-2xl">{settled ? "Payment received" : "Payment processing"}</CardTitle>
         <CardDescription>
@@ -76,7 +76,7 @@ export function PaymentSuccess({ paymentId }: { paymentId: string }) {
         <div className="grid gap-2 sm:grid-cols-2">
           <Button asChild>
             <Link href="/buyer/payments">
-              <Receipt /> View payments
+              <LuReceipt /> View payments
             </Link>
           </Button>
           <Button variant="outline" asChild>
@@ -93,7 +93,7 @@ export function PaymentCancelled({ paymentId, reason }: { paymentId?: string; re
     <Card>
       <CardHeader className="items-center text-center">
         <span className="mx-auto mb-2 flex size-14 items-center justify-center rounded-full bg-destructive/10 text-destructive">
-          <XCircle className="size-7" />
+          <LuCircleX className="size-7" />
         </span>
         <CardTitle className="text-2xl">Payment not completed</CardTitle>
         <CardDescription>

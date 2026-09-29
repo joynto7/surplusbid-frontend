@@ -1,8 +1,8 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { CircleDollarSign, Clock, Receipt, Wallet } from "lucide-react";
 import Link from "next/link";
+import { LuCircleDollarSign, LuClock, LuReceipt, LuWallet } from "react-icons/lu";
 import { AreaTrendChart } from "@/components/charts/lazy";
 import { type Column, DataTable } from "@/components/shared/data-table";
 import { StatCard, StatGrid } from "@/components/shared/stat-card";
@@ -80,21 +80,21 @@ export function PaymentsList() {
         <StatCard
           label="Total paid"
           value={formatMoney(paid.reduce((s, p) => s + p.amountCents, 0))}
-          icon={CircleDollarSign}
+          icon={LuCircleDollarSign}
           tone="success"
         />
         <StatCard
           label="Outstanding"
           value={formatMoney(pending.reduce((s, p) => s + p.amountCents, 0))}
-          icon={Clock}
+          icon={LuClock}
           tone="warning"
           hint={`${pending.length} invoice(s)`}
         />
-        <StatCard label="Invoices" value={items.length} icon={Receipt} />
+        <StatCard label="Invoices" value={items.length} icon={LuReceipt} />
         <StatCard
           label="Failed"
           value={items.filter((p) => p.status === "FAILED").length}
-          icon={Wallet}
+          icon={LuWallet}
           tone="danger"
         />
       </StatGrid>
@@ -138,7 +138,7 @@ export function PaymentsList() {
         getRowId={(p) => p.id}
         caption="Your invoices"
         empty={{
-          icon: Receipt,
+          icon: LuReceipt,
           title: values.status === "all" ? "No payments yet" : "No payments with this status",
           description: "When you win a lot, its invoice appears here with a Pay now button.",
         }}

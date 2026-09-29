@@ -1,6 +1,6 @@
 "use client";
 
-import type { LucideIcon } from "lucide-react";
+import type { IconType } from "react-icons";
 import { cn } from "@/lib/utils";
 
 /** Small segmented control (icon buttons) with radio semantics. */
@@ -12,7 +12,7 @@ export function ToggleGroupLite<T extends string>({
 }: {
   value: T;
   onChange: (value: T) => void;
-  options: { value: T; label: string; icon: LucideIcon }[];
+  options: { value: T; label: string; icon: IconType }[];
   label: string;
 }) {
   return (

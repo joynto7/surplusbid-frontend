@@ -1,7 +1,7 @@
 "use client";
 
-import { Heart } from "lucide-react";
 import Link from "next/link";
+import { LuHeart } from "react-icons/lu";
 import { LotCard } from "@/components/lots/lot-card";
 import { EmptyState } from "@/components/shared/empty-state";
 import { LotGridSkeleton } from "@/components/shared/skeletons";
@@ -19,7 +19,7 @@ export function Watchlist() {
   if (ids.length === 0) {
     return (
       <EmptyState
-        icon={Heart}
+        icon={LuHeart}
         title="Your watchlist is empty"
         description="Tap the heart on any lot to keep an eye on it here."
         action={

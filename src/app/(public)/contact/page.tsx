@@ -1,6 +1,6 @@
-import { Clock, LifeBuoy, Mail } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { LuClock, LuLifeBuoy, LuMail } from "react-icons/lu";
 import { ContactForm } from "@/components/forms/contact-form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { SUPPORT_EMAIL } from "@/lib/config";
@@ -24,7 +24,7 @@ export default function ContactPage() {
         </header>
         <ul className="space-y-4 text-sm">
           <li className="flex gap-3">
-            <Mail className="mt-0.5 size-4 text-primary" aria-hidden />
+            <LuMail className="mt-0.5 size-4 text-primary" aria-hidden />
             <span>
               <span className="font-medium">Email</span>
               <br />
@@ -34,7 +34,7 @@ export default function ContactPage() {
             </span>
           </li>
           <li className="flex gap-3">
-            <Clock className="mt-0.5 size-4 text-primary" aria-hidden />
+            <LuClock className="mt-0.5 size-4 text-primary" aria-hidden />
             <span>
               <span className="font-medium">Response time</span>
               <br />
@@ -42,7 +42,7 @@ export default function ContactPage() {
             </span>
           </li>
           <li className="flex gap-3">
-            <LifeBuoy className="mt-0.5 size-4 text-primary" aria-hidden />
+            <LuLifeBuoy className="mt-0.5 size-4 text-primary" aria-hidden />
             <span>
               <span className="font-medium">Quick answers</span>
               <br />

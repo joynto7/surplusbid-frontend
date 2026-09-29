@@ -1,9 +1,9 @@
 "use client";
 
 import { Elements, PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import { Lock } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useState } from "react";
+import { LuLock } from "react-icons/lu";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
@@ -56,7 +56,7 @@ function ConfirmForm({ submitLabel, returnUrl, onSucceeded, onFailed }: ConfirmP
         </Alert>
       )}
       <Button type="submit" size="lg" className="w-full" disabled={!stripe || busy}>
-        {busy ? <Spinner /> : <Lock />} {submitLabel}
+        {busy ? <Spinner /> : <LuLock />} {submitLabel}
       </Button>
       <p className="text-center text-muted-foreground text-xs">
         Test mode: use card 4242 4242 4242 4242, any future date and any CVC.

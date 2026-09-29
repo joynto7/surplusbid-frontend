@@ -1,8 +1,8 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { FilterX, Gavel, LayoutGrid, List } from "lucide-react";
 import Link from "next/link";
+import { LuFilterX, LuGavel, LuLayoutGrid, LuList } from "react-icons/lu";
 import { LotCard } from "@/components/lots/lot-card";
 import { Countdown } from "@/components/shared/countdown";
 import { EmptyState } from "@/components/shared/empty-state";
@@ -101,7 +101,7 @@ export function LotBrowser({ basePath = "/lots" }: { basePath?: string }) {
               onClick={() => set({ q: "", categoryId: "", status: "LIVE", sort: "ending" })}
               aria-label="Clear filters"
             >
-              <FilterX /> Clear
+              <LuFilterX /> Clear
             </Button>
           )}
         </div>
@@ -111,8 +111,8 @@ export function LotBrowser({ basePath = "/lots" }: { basePath?: string }) {
             value={effectiveView}
             onChange={setView}
             options={[
-              { value: "grid", label: "Grid view", icon: LayoutGrid },
-              { value: "list", label: "List view", icon: List },
+              { value: "grid", label: "Grid view", icon: LuLayoutGrid },
+              { value: "list", label: "List view", icon: LuList },
             ]}
           />
         </div>
@@ -126,14 +126,14 @@ export function LotBrowser({ basePath = "/lots" }: { basePath?: string }) {
           <LotGridSkeleton />
         ) : lots.isError ? (
           <EmptyState
-            icon={Gavel}
+            icon={LuGavel}
             title="Couldn't load auctions"
             description="The API didn't respond. Check your connection and retry."
             action={<Button onClick={() => lots.refetch()}>Retry</Button>}
           />
         ) : lots.data.items.length === 0 ? (
           <EmptyState
-            icon={Gavel}
+            icon={LuGavel}
             title={values.q ? `No lots match “${values.q}”` : "No lots found"}
             description="Try a different category or status, or clear your filters."
             action={

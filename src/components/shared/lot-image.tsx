@@ -1,5 +1,5 @@
-import { Package } from "lucide-react";
 import Image from "next/image";
+import { LuPackage } from "react-icons/lu";
 import { cn } from "@/lib/utils";
 
 /**
@@ -25,7 +25,7 @@ export function LotImage({
         <Image src={src} alt={alt} fill sizes={sizes} priority={priority} className="object-cover" />
       ) : (
         <div className="flex size-full items-center justify-center text-muted-foreground">
-          <Package className="size-8" aria-hidden />
+          <LuPackage className="size-8" aria-hidden />
           <span className="sr-only">No photo provided</span>
         </div>
       )}

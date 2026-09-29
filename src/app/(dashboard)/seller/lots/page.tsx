@@ -1,8 +1,8 @@
 import { HydrationBoundary } from "@tanstack/react-query";
-import { PackagePlus } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
+import { LuPackagePlus } from "react-icons/lu";
 import { ListingsTable } from "@/components/dashboard/seller/listings-table";
 import { PageHeader } from "@/components/shared/page-header";
 import { TableSkeleton } from "@/components/shared/skeletons";
@@ -26,7 +26,7 @@ export default async function ListingsPage() {
         actions={
           <Button asChild>
             <Link href="/seller/lots/new">
-              <PackagePlus /> Create lot
+              <LuPackagePlus /> Create lot
             </Link>
           </Button>
         }

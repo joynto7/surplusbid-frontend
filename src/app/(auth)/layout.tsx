@@ -1,4 +1,4 @@
-import { BadgeCheck, Gavel, ShieldCheck } from "lucide-react";
+import { LuBadgeCheck, LuGavel, LuShieldCheck } from "react-icons/lu";
 import { Logo } from "@/components/shared/logo";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
 
@@ -18,13 +18,13 @@ export default function AuthLayout({ children }: LayoutProps<"/">) {
           </h2>
           <ul className="space-y-3 text-primary-foreground/85">
             <li className="flex items-center gap-3">
-              <BadgeCheck className="size-5" aria-hidden /> Every business verified by our team
+              <LuBadgeCheck className="size-5" aria-hidden /> Every business verified by our team
             </li>
             <li className="flex items-center gap-3">
-              <ShieldCheck className="size-5" aria-hidden /> Refundable Stripe deposit holds on every lot
+              <LuShieldCheck className="size-5" aria-hidden /> Refundable Stripe deposit holds on every lot
             </li>
             <li className="flex items-center gap-3">
-              <Gavel className="size-5" aria-hidden /> Anti-sniping extensions keep closes fair
+              <LuGavel className="size-5" aria-hidden /> Anti-sniping extensions keep closes fair
             </li>
           </ul>
         </div>

@@ -2,9 +2,9 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Save } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { LuSave } from "react-icons/lu";
 import { toast } from "sonner";
 import { TextField } from "@/components/forms/fields";
 import { Button } from "@/components/ui/button";
@@ -61,7 +61,7 @@ export function ProfileForm() {
             Discard
           </Button>
           <Button type="submit" disabled={!form.formState.isDirty || save.isPending}>
-            {save.isPending ? <Spinner /> : <Save />} Save changes
+            {save.isPending ? <Spinner /> : <LuSave />} Save changes
           </Button>
         </CardFooter>
       </form>

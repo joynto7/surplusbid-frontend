@@ -1,18 +1,18 @@
-import {
-  ArrowRight,
-  BadgeCheck,
-  Building2,
-  Gavel,
-  Hourglass,
-  Search,
-  ShieldCheck,
-  Timer,
-  Truck,
-  Wallet,
-} from "lucide-react";
 import type { Metadata } from "next";
 import Form from "next/form";
 import Link from "next/link";
+import {
+  LuArrowRight,
+  LuBadgeCheck,
+  LuBuilding2,
+  LuGavel,
+  LuHourglass,
+  LuSearch,
+  LuShieldCheck,
+  LuTimer,
+  LuTruck,
+  LuWallet,
+} from "react-icons/lu";
 import { LotCard } from "@/components/lots/lot-card";
 import { EmptyState } from "@/components/shared/empty-state";
 import { Button } from "@/components/ui/button";
@@ -45,22 +45,22 @@ async function loadHome() {
 
 const STEPS = [
   {
-    icon: BadgeCheck,
+    icon: LuBadgeCheck,
     title: "Verify your business",
     body: "Upload a registration document. Our team reviews it before you can bid or list.",
   },
   {
-    icon: Wallet,
+    icon: LuWallet,
     title: "Authorize a deposit",
     body: `Place a refundable ${DEPOSIT_PERCENT}% hold on your card per lot. Losing bidders are released automatically.`,
   },
   {
-    icon: Gavel,
+    icon: LuGavel,
     title: "Bid in real time",
     body: "Bids inside the final two minutes extend the clock by two minutes, so no one wins by sniping.",
   },
   {
-    icon: Truck,
+    icon: LuTruck,
     title: "Pay & collect",
     body: `Winners pay the balance through Stripe within ${PAYMENT_DEADLINE_HOURS} hours, with the deposit already applied.`,
   },
@@ -80,7 +80,7 @@ export default async function HomePage() {
         <div className="mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 md:py-24 lg:grid-cols-[1.2fr_1fr] lg:items-center">
           <div className="space-y-6">
             <p className="inline-flex items-center gap-2 rounded-full border bg-background px-3 py-1 text-muted-foreground text-xs">
-              <ShieldCheck className="size-3.5 text-success" aria-hidden /> Verified B2B buyers & sellers only
+              <LuShieldCheck className="size-3.5 text-success" aria-hidden /> Verified B2B buyers & sellers only
             </p>
             <h1 className="font-semibold text-4xl tracking-tight sm:text-5xl">
               Industrial surplus, sold in <span className="text-primary">timed auctions</span>.
@@ -91,7 +91,10 @@ export default async function HomePage() {
             </p>
             <Form action="/lots" className="flex max-w-lg gap-2" role="search">
               <div className="relative flex-1">
-                <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
+                <LuSearch
+                  className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
+                  aria-hidden
+                />
                 <Input
                   name="q"
                   aria-label="Search auctions"
@@ -115,7 +118,7 @@ export default async function HomePage() {
           <Card className="border-primary/20 shadow-lg">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Hourglass className="size-4 text-primary" aria-hidden /> On the floor right now
+                <LuHourglass className="size-4 text-primary" aria-hidden /> On the floor right now
               </CardTitle>
               <CardDescription>Live figures from the SurplusBid API.</CardDescription>
             </CardHeader>
@@ -129,7 +132,7 @@ export default async function HomePage() {
                 <p className="text-muted-foreground text-sm">Categories</p>
               </div>
               <div className="col-span-2 flex items-center gap-3 rounded-lg border border-dashed p-4 text-sm">
-                <Timer className="size-5 shrink-0 text-warning" aria-hidden />
+                <LuTimer className="size-5 shrink-0 text-warning" aria-hidden />
                 <p>
                   <span className="font-medium">Anti-sniping on every lot.</span>{" "}
                   <span className="text-muted-foreground">Late bids add two minutes to the clock.</span>
@@ -150,7 +153,7 @@ export default async function HomePage() {
           </div>
           <Button variant="ghost" asChild>
             <Link href="/lots?status=LIVE&sortBy=endTime&sortOrder=asc">
-              View all <ArrowRight />
+              View all <LuArrowRight />
             </Link>
           </Button>
         </div>
@@ -189,7 +192,7 @@ export default async function HomePage() {
       <section className="mx-auto grid max-w-7xl gap-4 px-4 py-16 sm:px-6 md:grid-cols-2">
         <Card>
           <CardHeader>
-            <Building2 className="mb-2 size-6 text-primary" aria-hidden />
+            <LuBuilding2 className="mb-2 size-6 text-primary" aria-hidden />
             <CardTitle>For buyers</CardTitle>
             <CardDescription>
               Source equipment below replacement cost. Track your bids, win, and pay securely by card.
@@ -203,7 +206,7 @@ export default async function HomePage() {
         </Card>
         <Card>
           <CardHeader>
-            <Gavel className="mb-2 size-6 text-primary" aria-hidden />
+            <LuGavel className="mb-2 size-6 text-primary" aria-hidden />
             <CardTitle>For sellers</CardTitle>
             <CardDescription>
               Turn idle inventory into cash. List a lot in minutes with a reserve price and a guaranteed deposit from
@@ -225,7 +228,7 @@ function ClosingSoon({ lots, categoryName }: { lots: Paginated<Lot> | null; cate
   if (!lots) {
     return (
       <EmptyState
-        icon={Hourglass}
+        icon={LuHourglass}
         title="Auctions are loading slowly"
         description="The SurplusBid API didn't respond in time. Refresh in a moment, or open the full catalog."
         action={
@@ -239,7 +242,7 @@ function ClosingSoon({ lots, categoryName }: { lots: Paginated<Lot> | null; cate
   if (lots.items.length === 0) {
     return (
       <EmptyState
-        icon={Gavel}
+        icon={LuGavel}
         title="No live auctions right now"
         description="New lots are published by verified sellers every week. Register to get ready for the next one."
         action={

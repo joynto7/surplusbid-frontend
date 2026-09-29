@@ -1,8 +1,8 @@
 "use client";
 
 import { useQueries, useQuery } from "@tanstack/react-query";
-import { ArrowRight, BadgeCheck, Banknote, Radio, Scale } from "lucide-react";
 import Link from "next/link";
+import { LuArrowRight, LuBadgeCheck, LuBanknote, LuRadio, LuScale } from "react-icons/lu";
 import { BarTrendChart, DonutChart } from "@/components/charts/lazy";
 import { PageHeader } from "@/components/shared/page-header";
 import { DashboardSkeleton } from "@/components/shared/skeletons";
@@ -61,27 +61,27 @@ export function AdminOverview() {
         actions={
           <Button asChild>
             <Link href="/admin/verifications">
-              <BadgeCheck /> Review queue{pending ? ` (${pending})` : ""}
+              <LuBadgeCheck /> Review queue{pending ? ` (${pending})` : ""}
             </Link>
           </Button>
         }
       />
       <StatGrid>
-        <StatCard label="Live lots" value={s?.activeLots ?? "—"} icon={Radio} tone="success" />
+        <StatCard label="Live lots" value={s?.activeLots ?? "—"} icon={LuRadio} tone="success" />
         <StatCard
           label="Gross merchandise value"
           value={formatMoney(s?.totalGmvCents ?? 0)}
-          icon={Banknote}
+          icon={LuBanknote}
           hint="Settled payments"
         />
         <StatCard
           label="Verified sellers"
           value={s?.verifiedSellers ?? "—"}
-          icon={BadgeCheck}
+          icon={LuBadgeCheck}
           tone="warning"
           hint={`${pending} awaiting review`}
         />
-        <StatCard label="Open disputes" value={s?.openDisputes ?? "—"} icon={Scale} tone="danger" />
+        <StatCard label="Open disputes" value={s?.openDisputes ?? "—"} icon={LuScale} tone="danger" />
       </StatGrid>
 
       <div className="grid gap-4 lg:grid-cols-[1.6fr_1fr]">
@@ -152,7 +152,7 @@ export function AdminOverview() {
             </div>
             <Button variant="ghost" size="sm" asChild>
               <Link href="/admin/audit-logs">
-                All <ArrowRight />
+                All <LuArrowRight />
               </Link>
             </Button>
           </CardHeader>

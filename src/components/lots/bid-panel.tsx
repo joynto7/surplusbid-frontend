@@ -2,10 +2,10 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
-import { BarChart3, Gavel, Info, Lock, ShieldCheck, Timer, Trophy } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { LuChartColumn, LuGavel, LuInfo, LuLock, LuShieldCheck, LuTimer, LuTrophy } from "react-icons/lu";
 import { toast } from "sonner";
 import { StripeConfirm } from "@/components/payments/stripe-confirm";
 import { Countdown } from "@/components/shared/countdown";
@@ -54,7 +54,7 @@ export function BidPanel({ initialLot, viewer }: { initialLot: Lot; viewer: View
           <StatusBadge status={lot.status} />
           {live && (
             <span className="flex items-center gap-1.5 text-sm">
-              <Timer className="size-4 text-muted-foreground" aria-hidden />
+              <LuTimer className="size-4 text-muted-foreground" aria-hidden />
               <Countdown endTime={lot.endTime} className="font-semibold" />
             </span>
           )}
@@ -80,7 +80,7 @@ export function BidPanel({ initialLot, viewer }: { initialLot: Lot; viewer: View
         )}
         {leading && (
           <Alert className="border-success/30 bg-success/5">
-            <Trophy className="text-success" />
+            <LuTrophy className="text-success" />
             <AlertTitle>{live ? "You're the highest bidder" : "You won this lot"}</AlertTitle>
             <AlertDescription>
               {live ? "We'll show it here if someone outbids you." : "Pay the balance from your payments page."}
@@ -94,13 +94,13 @@ export function BidPanel({ initialLot, viewer }: { initialLot: Lot; viewer: View
         ) : !viewer ? (
           <Button asChild size="lg" className="w-full">
             <Link href={`/login?next=/lots/${lot.id}`}>
-              <Lock /> Sign in to bid
+              <LuLock /> Sign in to bid
             </Link>
           </Button>
         ) : isOwner ? (
           <Button asChild variant="outline" className="w-full">
             <Link href={`/seller/lots/${lot.id}`}>
-              <BarChart3 /> View lot performance
+              <LuChartColumn /> View lot performance
             </Link>
           </Button>
         ) : viewer.role !== "BUYER" ? (
@@ -112,11 +112,11 @@ export function BidPanel({ initialLot, viewer }: { initialLot: Lot; viewer: View
         )}
         <ul className="space-y-2 text-muted-foreground text-xs">
           <li className="flex gap-2">
-            <ShieldCheck className="size-3.5 shrink-0" aria-hidden /> {DEPOSIT_PERCENT}% refundable deposit hold (
+            <LuShieldCheck className="size-3.5 shrink-0" aria-hidden /> {DEPOSIT_PERCENT}% refundable deposit hold (
             {formatMoney(depositFor(lot.startingPriceCents))}) required before bidding
           </li>
           <li className="flex gap-2">
-            <Timer className="size-3.5 shrink-0" aria-hidden /> Bids in the final 2 minutes extend the close by 2
+            <LuTimer className="size-3.5 shrink-0" aria-hidden /> Bids in the final 2 minutes extend the close by 2
             minutes
           </li>
         </ul>
@@ -210,11 +210,11 @@ function BuyerBidForm({ lot, minimum }: { lot: Lot; minimum: number }) {
           ))}
         </div>
         <Button type="submit" size="lg" className="w-full" disabled={placeBid.isPending}>
-          {placeBid.isPending ? <Spinner /> : <Gavel />} Place bid
+          {placeBid.isPending ? <Spinner /> : <LuGavel />} Place bid
         </Button>
         {!hasDeposit && (
           <p className="flex items-center gap-1.5 text-muted-foreground text-xs">
-            <Info className="size-3.5" aria-hidden /> You&apos;ll authorize the deposit hold before your first bid.
+            <LuInfo className="size-3.5" aria-hidden /> You&apos;ll authorize the deposit hold before your first bid.
           </p>
         )}
       </form>
@@ -293,7 +293,7 @@ function DepositDialog({
               Cancel
             </Button>
             <Button onClick={authorize} disabled={deposit.isPending}>
-              {deposit.isPending ? <Spinner /> : <ShieldCheck />} Authorize {formatMoney(amount)}
+              {deposit.isPending ? <Spinner /> : <LuShieldCheck />} Authorize {formatMoney(amount)}
             </Button>
           </DialogFooter>
         )}

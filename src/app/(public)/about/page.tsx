@@ -1,6 +1,6 @@
-import { BadgeCheck, Gavel, Recycle, ShieldCheck } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { LuBadgeCheck, LuGavel, LuRecycle, LuShieldCheck } from "react-icons/lu";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -14,22 +14,22 @@ export const metadata: Metadata = {
 
 const PRINCIPLES = [
   {
-    icon: BadgeCheck,
+    icon: LuBadgeCheck,
     title: "Businesses only",
     body: "Every buyer and seller submits a business registration document that an admin reviews before they trade.",
   },
   {
-    icon: ShieldCheck,
+    icon: LuShieldCheck,
     title: "Money on the line",
     body: "Bidders authorize a refundable card hold per lot, so winning bids come from serious buyers.",
   },
   {
-    icon: Gavel,
+    icon: LuGavel,
     title: "Fair closes",
     body: "A bid in the last two minutes extends the auction by two minutes. The highest real offer wins.",
   },
   {
-    icon: Recycle,
+    icon: LuRecycle,
     title: "Less waste",
     body: "Surplus that would sit in a warehouse or go for scrap ends up working on someone else's line.",
   },

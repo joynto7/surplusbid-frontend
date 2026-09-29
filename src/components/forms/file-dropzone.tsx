@@ -1,8 +1,8 @@
 "use client";
 
-import { FileText, ImagePlus, X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { LuFileText, LuImagePlus, LuX } from "react-icons/lu";
 import { cn } from "@/lib/utils";
 
 /** Object URLs for local previews, revoked when the files change or the component unmounts. */
@@ -75,7 +75,7 @@ export function FileDropzone({
           disabled && "pointer-events-none opacity-60",
         )}
       >
-        <ImagePlus className="size-6 text-muted-foreground" aria-hidden />
+        <LuImagePlus className="size-6 text-muted-foreground" aria-hidden />
         <span className="font-medium text-sm">
           Drop {multiple ? "files" : "a file"} here or <span className="text-primary">browse</span>
         </span>
@@ -111,7 +111,7 @@ export function FileDropzone({
                 </div>
               ) : (
                 <div className="flex items-center gap-3 p-3">
-                  <FileText className="size-8 shrink-0 text-primary" aria-hidden />
+                  <LuFileText className="size-8 shrink-0 text-primary" aria-hidden />
                   <div className="min-w-0">
                     <p className="truncate font-medium text-sm">{file.name}</p>
                     <p className="text-muted-foreground text-xs">{formatSize(file.size)}</p>
@@ -125,7 +125,7 @@ export function FileDropzone({
                 disabled={disabled}
                 className="absolute top-1.5 right-1.5 rounded-full bg-background/90 p-1 shadow hover:bg-background"
               >
-                <X className="size-3.5" />
+                <LuX className="size-3.5" />
               </button>
             </li>
           ))}

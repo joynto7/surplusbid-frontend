@@ -1,18 +1,19 @@
 "use client";
 
-import { Building2, type LucideIcon, ShieldCheck, Store } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
+import type { IconType } from "react-icons";
+import { LuBuilding2, LuShieldCheck, LuStore } from "react-icons/lu";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { demoLoginAction } from "@/lib/auth/actions";
 import type { Role } from "@/types/api";
 
-const DEMOS: { role: Role; title: string; description: string; icon: LucideIcon }[] = [
-  { role: "ADMIN", title: "Admin", description: "Verify businesses, manage categories, audit", icon: ShieldCheck },
-  { role: "BUYER", title: "Buyer", description: "Browse, place deposits, bid and pay", icon: Building2 },
-  { role: "SELLER", title: "Seller", description: "List lots, publish, track bids & earnings", icon: Store },
+const DEMOS: { role: Role; title: string; description: string; icon: IconType }[] = [
+  { role: "ADMIN", title: "Admin", description: "Verify businesses, manage categories, audit", icon: LuShieldCheck },
+  { role: "BUYER", title: "Buyer", description: "Browse, place deposits, bid and pay", icon: LuBuilding2 },
+  { role: "SELLER", title: "Seller", description: "List lots, publish, track bids & earnings", icon: LuStore },
 ];
 
 /** One click per role: the server action signs in with that role's demo account. */
@@ -39,7 +40,7 @@ export function DemoLogin() {
   return (
     <section aria-labelledby="demo-login" className="space-y-3">
       <h2 id="demo-login" className="text-center font-medium text-sm">
-        🚀 Quick demo login
+        Quick demo login
       </h2>
       <div className="grid gap-2 sm:grid-cols-3">
         {DEMOS.map(({ role, title, description, icon: Icon }) => (

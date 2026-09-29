@@ -1,7 +1,7 @@
 "use client";
 
-import { Search, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { LuSearch, LuX } from "react-icons/lu";
 import { Input } from "@/components/ui/input";
 import { useDebounce } from "@/hooks/use-debounce";
 
@@ -29,7 +29,7 @@ export function SearchInput({
 
   return (
     <div className="relative w-full sm:max-w-xs">
-      <Search className="absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
+      <LuSearch className="absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
       <Input
         type="search"
         aria-label={label}
@@ -45,7 +45,7 @@ export function SearchInput({
           aria-label="Clear search"
           className="absolute top-1/2 right-2 -translate-y-1/2 rounded p-0.5 text-muted-foreground hover:text-foreground"
         >
-          <X className="size-3.5" />
+          <LuX className="size-3.5" />
         </button>
       )}
     </div>

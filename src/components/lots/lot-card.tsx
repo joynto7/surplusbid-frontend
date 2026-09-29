@@ -1,5 +1,5 @@
-import { Clock } from "lucide-react";
 import Link from "next/link";
+import { LuClock } from "react-icons/lu";
 import { Countdown } from "@/components/shared/countdown";
 import { LotImage } from "@/components/shared/lot-image";
 import { StatusBadge } from "@/components/shared/status-badge";
@@ -50,7 +50,7 @@ export function LotCard({
           </div>
           {lot.status === "LIVE" && (
             <p className="flex items-center gap-1 text-muted-foreground text-sm">
-              <Clock className="size-3.5" aria-hidden />
+              <LuClock className="size-3.5" aria-hidden />
               <Countdown endTime={lot.endTime} />
             </p>
           )}

@@ -1,9 +1,9 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Save } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { type Control, useForm } from "react-hook-form";
+import { LuSave } from "react-icons/lu";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
@@ -77,7 +77,7 @@ export function EditDraftForm({ lot }: { lot: Lot }) {
             Cancel
           </Button>
           <Button type="submit" disabled={update.isPending || !form.formState.isDirty}>
-            {update.isPending ? <Spinner /> : <Save />} Save draft
+            {update.isPending ? <Spinner /> : <LuSave />} Save draft
           </Button>
         </CardFooter>
       </Card>

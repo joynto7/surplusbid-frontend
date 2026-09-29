@@ -1,7 +1,6 @@
 "use client";
 
 import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useState } from "react";
 import { toast } from "sonner";
 import { ApiError, errorMessage } from "@/lib/api/errors";
@@ -41,10 +40,5 @@ function makeClient() {
 
 export function QueryProvider({ children }: { children: React.ReactNode }) {
   const [client] = useState(makeClient);
-  return (
-    <QueryClientProvider client={client}>
-      {children}
-      <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
-    </QueryClientProvider>
-  );
+  return <QueryClientProvider client={client}>{children}</QueryClientProvider>;
 }

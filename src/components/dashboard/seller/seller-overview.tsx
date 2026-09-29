@@ -1,8 +1,8 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { ArrowRight, Banknote, FilePen, PackagePlus, Radio, TrendingUp } from "lucide-react";
 import Link from "next/link";
+import { LuArrowRight, LuBanknote, LuFilePen, LuPackagePlus, LuRadio, LuTrendingUp } from "react-icons/lu";
 import { BarTrendChart, DonutChart } from "@/components/charts/lazy";
 import { VerificationBanner } from "@/components/dashboard/verification-banner";
 import { Countdown } from "@/components/shared/countdown";
@@ -52,7 +52,7 @@ export function SellerOverview() {
         actions={
           <Button asChild>
             <Link href="/seller/lots/new">
-              <PackagePlus /> Create lot
+              <LuPackagePlus /> Create lot
             </Link>
           </Button>
         }
@@ -62,29 +62,29 @@ export function SellerOverview() {
         <StatCard
           label="Live lots"
           value={s.live.length}
-          icon={Radio}
+          icon={LuRadio}
           tone="success"
           hint={`${formatMoney(s.liveBidValue)} in current bids`}
         />
-        <StatCard label="Drafts" value={s.drafts.length} icon={FilePen} hint="Ready to publish" />
+        <StatCard label="Drafts" value={s.drafts.length} icon={LuFilePen} hint="Ready to publish" />
         <StatCard
           label="Gross sales"
           value={formatMoney(s.hammerCents)}
-          icon={Banknote}
+          icon={LuBanknote}
           tone="warning"
           hint={`${s.sold.length} lot(s) sold`}
         />
         <StatCard
           label="Sell-through"
           value={pct(s.sellThrough)}
-          icon={TrendingUp}
+          icon={LuTrendingUp}
           hint={`Uplift over start ${pct(s.upliftPct)}`}
         />
       </StatGrid>
 
       {lots.length === 0 ? (
         <EmptyState
-          icon={PackagePlus}
+          icon={LuPackagePlus}
           title="List your first lot"
           description="The wizard walks you through details, photos, pricing and the auction window."
           action={
@@ -137,7 +137,7 @@ export function SellerOverview() {
           </div>
           <Button variant="ghost" size="sm" asChild>
             <Link href="/seller/lots?status=LIVE">
-              All live <ArrowRight />
+              All live <LuArrowRight />
             </Link>
           </Button>
         </CardHeader>

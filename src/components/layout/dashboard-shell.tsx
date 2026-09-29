@@ -1,9 +1,9 @@
 "use client";
 
-import { ChevronsUpDown, ExternalLink, LogOut, UserCog } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useTransition } from "react";
+import { LuChevronsUpDown, LuExternalLink, LuLogOut, LuUserCog } from "react-icons/lu";
 import { toast } from "sonner";
 import { Logo } from "@/components/shared/logo";
 import { StatusBadge } from "@/components/shared/status-badge";
@@ -93,7 +93,7 @@ function UserMenu() {
             <span className="truncate font-medium">{me.companyName}</span>
             <span className="truncate text-muted-foreground text-xs">{me.email}</span>
           </div>
-          <ChevronsUpDown className="ml-auto size-4" />
+          <LuChevronsUpDown className="ml-auto size-4" />
         </SidebarMenuButton>
       </DropdownMenuTrigger>
       <DropdownMenuContent side="top" align="start" className="w-(--radix-dropdown-menu-trigger-width) min-w-56">
@@ -105,13 +105,13 @@ function UserMenu() {
         {me.role !== "ADMIN" && (
           <DropdownMenuItem asChild>
             <Link href={profileHref}>
-              <UserCog /> Profile & settings
+              <LuUserCog /> Profile & settings
             </Link>
           </DropdownMenuItem>
         )}
         <DropdownMenuItem asChild>
           <Link href="/">
-            <ExternalLink /> Public site
+            <LuExternalLink /> Public site
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
@@ -123,7 +123,7 @@ function UserMenu() {
             startTransition(() => logoutAction());
           }}
         >
-          <LogOut /> Sign out
+          <LuLogOut /> Sign out
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

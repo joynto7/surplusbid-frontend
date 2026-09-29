@@ -1,10 +1,10 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { LayoutDashboard, Menu } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { LuLayoutDashboard, LuMenu } from "react-icons/lu";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -67,7 +67,7 @@ export function HeaderAuth() {
     return (
       <Button size="sm" asChild>
         <Link href={data.home}>
-          <LayoutDashboard /> Dashboard
+          <LuLayoutDashboard /> Dashboard
         </Link>
       </Button>
     );
@@ -91,7 +91,7 @@ export function MobileNav({ items }: { items: readonly NavItem[] }) {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button variant="ghost" size="icon" className="md:hidden" aria-label="Open menu">
-          <Menu />
+          <LuMenu />
         </Button>
       </SheetTrigger>
       <SheetContent side="right" className="w-72">

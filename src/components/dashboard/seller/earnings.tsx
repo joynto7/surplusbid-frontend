@@ -1,8 +1,8 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { Banknote, Download, PiggyBank, Receipt, TrendingUp } from "lucide-react";
 import Link from "next/link";
+import { LuBanknote, LuDownload, LuPiggyBank, LuReceipt, LuTrendingUp } from "react-icons/lu";
 import { BarTrendChart } from "@/components/charts/lazy";
 import { type Column, DataTable } from "@/components/shared/data-table";
 import { DashboardSkeleton } from "@/components/shared/skeletons";
@@ -96,21 +96,21 @@ export function Earnings() {
         <StatCard
           label="Gross sales"
           value={formatMoney(s.hammerCents)}
-          icon={Banknote}
+          icon={LuBanknote}
           tone="success"
           hint={`${sold.length} lots sold`}
         />
         <StatCard
           label="Deposits secured"
           value={formatMoney(s.depositsSecuredCents)}
-          icon={PiggyBank}
+          icon={LuPiggyBank}
           hint="Captured from winners"
         />
-        <StatCard label="Average sale" value={formatMoney(avg)} icon={Receipt} tone="warning" />
+        <StatCard label="Average sale" value={formatMoney(avg)} icon={LuReceipt} tone="warning" />
         <StatCard
           label="Sell-through"
           value={pct(s.sellThrough)}
-          icon={TrendingUp}
+          icon={LuTrendingUp}
           hint={`${s.closed.length} closed lots`}
         />
       </StatGrid>
@@ -131,7 +131,7 @@ export function Earnings() {
       <div className="flex items-center justify-between">
         <h2 className="font-semibold text-lg">Sold lots</h2>
         <Button variant="outline" size="sm" onClick={() => downloadCsv(sold)} disabled={!sold.length}>
-          <Download /> Export CSV
+          <LuDownload /> Export CSV
         </Button>
       </div>
       <DataTable
@@ -140,7 +140,7 @@ export function Earnings() {
         getRowId={(l) => l.id}
         caption="Sold lots"
         empty={{
-          icon: Banknote,
+          icon: LuBanknote,
           title: "No sales yet",
           description: "Sold lots and their proceeds will be listed here.",
         }}

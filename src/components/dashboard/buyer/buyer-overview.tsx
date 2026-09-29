@@ -1,8 +1,8 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { AlertCircle, ArrowRight, CreditCard, Gavel, Receipt, TrendingUp, Trophy } from "lucide-react";
 import Link from "next/link";
+import { LuArrowRight, LuCircleAlert, LuCreditCard, LuGavel, LuReceipt, LuTrendingUp, LuTrophy } from "react-icons/lu";
 import { BarTrendChart, DonutChart } from "@/components/charts/lazy";
 import { VerificationBanner } from "@/components/dashboard/verification-banner";
 import { Countdown } from "@/components/shared/countdown";
@@ -47,7 +47,7 @@ export function BuyerOverview() {
         actions={
           <Button asChild>
             <Link href="/lots">
-              <Gavel /> Browse auctions
+              <LuGavel /> Browse auctions
             </Link>
           </Button>
         }
@@ -56,7 +56,7 @@ export function BuyerOverview() {
 
       {due.map((p) => (
         <Alert key={p.id} className="border-primary/40 bg-primary/5">
-          <CreditCard className="text-primary" />
+          <LuCreditCard className="text-primary" />
           <AlertTitle>Payment due: {formatMoney(p.amountCents)}</AlertTitle>
           <AlertDescription className="flex flex-wrap items-center gap-3">
             <span>
@@ -73,16 +73,22 @@ export function BuyerOverview() {
         <StatCard
           label="Leading"
           value={winning.length}
-          icon={TrendingUp}
+          icon={LuTrendingUp}
           tone="success"
           hint="Live lots you're winning"
         />
-        <StatCard label="Outbid" value={outbid.length} icon={AlertCircle} tone="danger" hint="Live lots to re-bid on" />
-        <StatCard label="Lots won" value={won.length} icon={Trophy} tone="warning" hint="All time" />
+        <StatCard
+          label="Outbid"
+          value={outbid.length}
+          icon={LuCircleAlert}
+          tone="danger"
+          hint="Live lots to re-bid on"
+        />
+        <StatCard label="Lots won" value={won.length} icon={LuTrophy} tone="warning" hint="All time" />
         <StatCard
           label="Paid to date"
           value={formatMoney(paidCents)}
-          icon={Receipt}
+          icon={LuReceipt}
           hint={`${due.length} payment(s) due`}
         />
       </StatGrid>
@@ -123,7 +129,7 @@ export function BuyerOverview() {
                 ]}
               />
             ) : (
-              <EmptyState icon={Gavel} title="No bids yet" description="Your positions will appear here." />
+              <EmptyState icon={LuGavel} title="No bids yet" description="Your positions will appear here." />
             )}
           </CardContent>
         </Card>
@@ -137,14 +143,14 @@ export function BuyerOverview() {
           </div>
           <Button variant="ghost" size="sm" asChild>
             <Link href="/buyer/bids">
-              All bids <ArrowRight />
+              All bids <LuArrowRight />
             </Link>
           </Button>
         </CardHeader>
         <CardContent>
           {[...winning, ...outbid].length === 0 ? (
             <EmptyState
-              icon={Gavel}
+              icon={LuGavel}
               title="You're not in any live auctions"
               description="Find a lot, authorize the deposit and place your first bid."
               action={

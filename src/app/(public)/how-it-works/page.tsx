@@ -1,6 +1,16 @@
-import { Check, CreditCard, FileCheck2, Gavel, ListPlus, Radio, Timer, Undo2, Wallet } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import {
+  LuCheck,
+  LuCreditCard,
+  LuFileCheck2,
+  LuGavel,
+  LuListPlus,
+  LuRadio,
+  LuTimer,
+  LuUndo2,
+  LuWallet,
+} from "react-icons/lu";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -15,41 +25,41 @@ export const metadata: Metadata = {
 
 const BUYER_STEPS = [
   {
-    icon: FileCheck2,
+    icon: LuFileCheck2,
     title: "Register & verify",
     body: "Create a buyer account and upload your business registration.",
   },
   {
-    icon: Wallet,
+    icon: LuWallet,
     title: "Authorize a deposit",
     body: `Before your first bid on a lot, place a ${DEPOSIT_PERCENT}% hold on your card, based on the starting price. It isn't charged unless you win.`,
   },
   {
-    icon: Gavel,
+    icon: LuGavel,
     title: "Bid",
     body: "Each bid must beat the current price by at least the lot's bid increment. You'll see when you're outbid.",
   },
   {
-    icon: CreditCard,
+    icon: LuCreditCard,
     title: "Win & pay",
     body: `The deposit is captured and applied. Pay the balance through Stripe within ${PAYMENT_DEADLINE_HOURS} hours.`,
   },
 ];
 
 const SELLER_STEPS = [
-  { icon: FileCheck2, title: "Register & verify", body: "Create a seller account and get your business approved." },
+  { icon: LuFileCheck2, title: "Register & verify", body: "Create a seller account and get your business approved." },
   {
-    icon: ListPlus,
+    icon: LuListPlus,
     title: "Create a lot",
     body: "A guided wizard covers details, photos, pricing (starting, reserve, increment) and the auction window.",
   },
   {
-    icon: Radio,
+    icon: LuRadio,
     title: "Publish",
     body: "Drafts can be edited freely. Publishing puts the lot live for verified buyers.",
   },
   {
-    icon: Check,
+    icon: LuCheck,
     title: "Settle",
     body: "When the clock runs out the highest bidder wins, and their deposit guarantees they follow through.",
   },
@@ -57,17 +67,17 @@ const SELLER_STEPS = [
 
 const RULES = [
   {
-    icon: Timer,
+    icon: LuTimer,
     title: "Anti-sniping",
     body: "A bid placed in the final 2 minutes extends the close by 2 minutes.",
   },
   {
-    icon: Undo2,
+    icon: LuUndo2,
     title: "Automatic releases",
     body: "When a lot closes, every losing bidder's deposit hold is released automatically.",
   },
   {
-    icon: CreditCard,
+    icon: LuCreditCard,
     title: "Missed payments",
     body: `If the winner doesn't pay within ${PAYMENT_DEADLINE_HOURS} hours, their deposit is forfeited and the lot goes to the next-highest bidder.`,
   },

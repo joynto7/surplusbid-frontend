@@ -1,4 +1,4 @@
-import type { LucideIcon } from "lucide-react";
+import type { IconType } from "react-icons";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 
 /** Meaningful empty state for every list/table: icon, what's missing, and what to do next. */
@@ -8,7 +8,7 @@ export function EmptyState({
   description,
   action,
 }: {
-  icon: LucideIcon;
+  icon: IconType;
   title: string;
   description?: React.ReactNode;
   action?: React.ReactNode;

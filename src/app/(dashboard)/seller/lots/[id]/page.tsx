@@ -1,7 +1,7 @@
-import { ChevronLeft } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { LuChevronLeft } from "react-icons/lu";
 import { LotPerformance } from "@/components/dashboard/seller/lot-performance";
 import { ApiError } from "@/lib/api/errors";
 import { serverApi } from "@/lib/api/server";
@@ -28,7 +28,7 @@ export default async function LotPerformancePage({ params }: PageProps<"/seller/
         href="/seller/lots"
         className="flex w-fit items-center gap-1 text-muted-foreground text-sm hover:text-foreground"
       >
-        <ChevronLeft className="size-4" /> My listings
+        <LuChevronLeft className="size-4" /> My listings
       </Link>
       <LotPerformance initialLot={lot} />
     </div>

@@ -1,11 +1,11 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Building2, Store, UserPlus } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTransition } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
+import { LuBuilding2, LuStore, LuUserPlus } from "react-icons/lu";
 import { toast } from "sonner";
 import { TextField } from "@/components/forms/fields";
 import { Button } from "@/components/ui/button";
@@ -18,8 +18,8 @@ import { cn } from "@/lib/utils";
 import { type RegisterValues, registerSchema } from "@/lib/validation";
 
 const ROLES = [
-  { value: "BUYER", title: "I want to buy", body: "Bid on surplus lots", icon: Building2 },
-  { value: "SELLER", title: "I want to sell", body: "List surplus inventory", icon: Store },
+  { value: "BUYER", title: "I want to buy", body: "Bid on surplus lots", icon: LuBuilding2 },
+  { value: "SELLER", title: "I want to sell", body: "List surplus inventory", icon: LuStore },
 ] as const;
 
 function passwordStrength(pw: string) {
@@ -163,7 +163,7 @@ export function RegisterForm() {
           )}
         />
         <Button type="submit" size="lg" className="w-full" disabled={pending}>
-          {pending ? <Spinner /> : <UserPlus />} Create account
+          {pending ? <Spinner /> : <LuUserPlus />} Create account
         </Button>
       </FieldGroup>
     </form>

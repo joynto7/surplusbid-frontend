@@ -1,8 +1,8 @@
 "use client";
 
-import { Monitor, Moon, Sun } from "lucide-react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
+import { LuMonitor, LuMoon, LuSun } from "react-icons/lu";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { ToggleGroupLite } from "@/components/shared/toggle-group-lite";
 import { Button } from "@/components/ui/button";
@@ -66,9 +66,9 @@ export function AppearanceCard() {
           value={(mounted ? theme : "system") as "light" | "dark" | "system"}
           onChange={setTheme}
           options={[
-            { value: "light", label: "Light", icon: Sun },
-            { value: "dark", label: "Dark", icon: Moon },
-            { value: "system", label: "System", icon: Monitor },
+            { value: "light", label: "Light", icon: LuSun },
+            { value: "dark", label: "Dark", icon: LuMoon },
+            { value: "system", label: "System", icon: LuMonitor },
           ]}
         />
       </CardContent>

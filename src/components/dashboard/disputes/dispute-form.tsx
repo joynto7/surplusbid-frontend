@@ -2,8 +2,8 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { Scale, Send } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { LuScale, LuSend } from "react-icons/lu";
 import { toast } from "sonner";
 import { SelectField, TextareaField } from "@/components/forms/fields";
 import { EmptyState } from "@/components/shared/empty-state";
@@ -52,7 +52,7 @@ export function DisputeForm({ lots, loading }: { lots: { id: string; title: stri
   if (!loading && lots.length === 0) {
     return (
       <EmptyState
-        icon={Scale}
+        icon={LuScale}
         title="No eligible lots"
         description="Disputes can be filed on lots you've won (buyers) or sold (sellers)."
       />
@@ -93,7 +93,7 @@ export function DisputeForm({ lots, loading }: { lots: { id: string; title: stri
               description="At least 10 characters."
             />
             <Button type="submit" className="w-fit" disabled={create.isPending}>
-              {create.isPending ? <Spinner /> : <Send />} Submit dispute
+              {create.isPending ? <Spinner /> : <LuSend />} Submit dispute
             </Button>
           </FieldGroup>
         </CardContent>

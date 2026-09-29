@@ -1,4 +1,4 @@
-import type { LucideIcon } from "lucide-react";
+import type { IconType } from "react-icons";
 import { EmptyState } from "@/components/shared/empty-state";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -29,7 +29,7 @@ export function DataTable<T>({
   rows: T[] | undefined;
   getRowId: (row: T) => string;
   loading?: boolean;
-  empty: { icon: LucideIcon; title: string; description?: string; action?: React.ReactNode };
+  empty: { icon: IconType; title: string; description?: string; action?: React.ReactNode };
   /** True while showing previous-page data during a refetch. */
   dimmed?: boolean;
   caption?: string;

@@ -1,7 +1,8 @@
-import { CheckCircle2, Clock, FileWarning, type LucideIcon, ShieldQuestion } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import type { IconType } from "react-icons";
+import { LuCircleCheck, LuClock, LuFileWarning, LuShieldQuestion } from "react-icons/lu";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,27 +14,27 @@ import type { VerificationStatus } from "@/types/api";
 
 export const metadata: Metadata = { title: "Verification status", robots: { index: false } };
 
-const COPY: Record<VerificationStatus, { icon: LucideIcon; tone: string; title: string; body: string }> = {
+const COPY: Record<VerificationStatus, { icon: IconType; tone: string; title: string; body: string }> = {
   UNVERIFIED: {
-    icon: ShieldQuestion,
+    icon: LuShieldQuestion,
     tone: "bg-muted text-muted-foreground",
     title: "Verification not started",
     body: "Upload your business registration document to start trading.",
   },
   PENDING: {
-    icon: Clock,
+    icon: LuClock,
     tone: "bg-warning/10 text-warning",
     title: "Under review",
     body: "An admin is reviewing your document. You can explore your dashboard in the meantime. We'll update this page as soon as it's decided.",
   },
   VERIFIED: {
-    icon: CheckCircle2,
+    icon: LuCircleCheck,
     tone: "bg-success/10 text-success",
     title: "You're verified",
     body: "Your business is approved. You have full access to bidding or listing.",
   },
   REJECTED: {
-    icon: FileWarning,
+    icon: LuFileWarning,
     tone: "bg-destructive/10 text-destructive",
     title: "Document not accepted",
     body: "We couldn't verify your business from the document provided. Please upload a clearer or more recent one.",

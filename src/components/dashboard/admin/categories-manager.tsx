@@ -2,9 +2,9 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueries, useQuery } from "@tanstack/react-query";
-import { Plus, Tags } from "lucide-react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
+import { LuPlus, LuTags } from "react-icons/lu";
 import { TextField } from "@/components/forms/fields";
 import { type Column, DataTable } from "@/components/shared/data-table";
 import { Button } from "@/components/ui/button";
@@ -83,7 +83,7 @@ export function CategoriesManager() {
         getRowId={(c) => c.id}
         caption="Categories"
         empty={{
-          icon: Tags,
+          icon: LuTags,
           title: "No categories yet",
           description: "Create the first one to let sellers list lots.",
         }}
@@ -102,7 +102,7 @@ export function CategoriesManager() {
               placeholder="e.g. Packaging equipment"
             />
             <Button type="submit" disabled={create.isPending}>
-              {create.isPending ? <Spinner /> : <Plus />} Add category
+              {create.isPending ? <Spinner /> : <LuPlus />} Add category
             </Button>
           </form>
         </CardContent>
