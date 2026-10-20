@@ -133,7 +133,7 @@ function ResourcesMenu() {
   );
 }
 
-/** Logged out: Home, Explore, Categories, How it works, Blog, About, Contact. Logged in: adds Dashboard and role links. */
+/** Logged out: Home, Explore, Categories, How it works, Blog, About, Contact. Logged in: Home, Explore, Categories, Dashboard, two role links and Resources. */
 export function DesktopNav() {
   const { data } = useHeaderSession();
   const role = data?.role ?? null;
@@ -147,7 +147,8 @@ export function DesktopNav() {
   ];
   return (
     <ul className="flex items-center gap-0.5">
-      <li className="hidden xl:block">
+      {/* Signed out, Home only fits from xl; signed in it always shows, keeping 6+ routes in the bar. */}
+      <li className={role ? undefined : "hidden xl:block"}>
         <NavLink link={home} />
       </li>
       <li>
@@ -216,7 +217,7 @@ export function HeaderAuth() {
                 {initials(name)}
               </AvatarFallback>
             </Avatar>
-            <span className="hidden max-w-32 truncate font-medium sm:inline">{name}</span>
+            <span className="hidden max-w-32 truncate font-medium sm:inline lg:hidden xl:inline">{name}</span>
             <LuChevronDown className="size-3.5 text-muted-foreground" aria-hidden />
           </button>
         </DropdownMenuTrigger>

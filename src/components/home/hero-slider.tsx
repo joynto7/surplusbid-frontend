@@ -57,7 +57,7 @@ export function HeroSlider({ slides: initial, liveLots }: { slides: HeroSlide[];
     <section
       aria-roledescription="carousel"
       aria-label="Featured categories"
-      className="relative isolate z-20 flex min-h-[560px] w-full items-center bg-slate-950 py-16 lg:h-[65vh] lg:max-h-[760px] lg:py-0"
+      className="relative isolate z-20 flex h-[68svh] max-h-[760px] min-h-96 w-full items-center bg-slate-950 sm:h-[65svh]"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}
@@ -91,19 +91,19 @@ export function HeroSlider({ slides: initial, liveLots }: { slides: HeroSlide[];
         className="absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-t from-slate-950/80 to-transparent"
       />
 
-      <div className="mx-auto grid w-full max-w-7xl items-center gap-10 px-4 pb-16 sm:px-6 lg:grid-cols-[1.25fr_1fr] lg:pb-10">
-        <div className="space-y-6 text-white">
-          <p className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-sm backdrop-blur">
+      <div className="mx-auto grid w-full max-w-7xl items-center gap-10 px-4 pt-2 pb-14 sm:px-6 lg:grid-cols-[1.25fr_1fr] lg:pb-12">
+        <div className="space-y-4 text-white sm:space-y-6">
+          <p className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs backdrop-blur sm:text-sm">
             <span className="relative flex size-2">
               <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-70" />
               <span className="relative inline-flex size-2 rounded-full bg-emerald-400" />
             </span>
             {liveLots} live auctions from verified businesses
           </p>
-          <h1 className="max-w-2xl font-bold text-4xl leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl">
+          <h1 className="max-w-2xl font-bold text-[2rem] leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl">
             Industrial surplus, sold in <span className="text-highlight">timed auctions</span>.
           </h1>
-          <p className="max-w-xl text-lg text-white/80">
+          <p className="max-w-xl text-base text-white/80 sm:text-lg [@media(max-height:720px)]:hidden">
             Machinery, vehicles, IT hardware and materials from companies that ran them. Every bidder has a deposit on
             the line, so every bid is real.
           </p>
@@ -124,7 +124,7 @@ export function HeroSlider({ slides: initial, liveLots }: { slides: HeroSlide[];
             >
               <Link href="/register?role=SELLER">Start selling</Link>
             </Button>
-            <span className="flex items-center gap-1.5 text-sm text-white/70">
+            <span className="hidden items-center gap-1.5 text-sm text-white/70 sm:flex">
               <LuShieldCheck className="size-4 text-emerald-400" aria-hidden /> Stripe-secured deposits
             </span>
           </div>
