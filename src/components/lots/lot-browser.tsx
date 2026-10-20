@@ -63,7 +63,7 @@ const usd = (dollars: string) => `$${Number(dollars).toLocaleString("en-US")}`;
  * sort and page all live in the URL, so any view is shareable. A sentence in
  * the search box ("forklift under 20k in texas") is read by the AI into filters.
  */
-export function LotBrowser({ basePath = "/lots" }: { basePath?: string }) {
+export function LotBrowser({ basePath = "/lots", grid = LOT_GRID }: { basePath?: string; grid?: string }) {
   const { values, page, set, setPage, isPending } = useUrlState(BROWSE_KEYS);
   const query = toLotQuery({ ...values, page: String(page) });
   const lots = useQuery(lotsQuery(query));
@@ -229,7 +229,7 @@ export function LotBrowser({ basePath = "/lots" }: { basePath?: string }) {
         className={cn("transition-opacity", (lots.isPlaceholderData || isPending) && "opacity-60")}
       >
         {lots.isPending ? (
-          <LotGridSkeleton />
+          <LotGridSkeleton className={grid} />
         ) : lots.isError ? (
           <EmptyState
             icon={LuGavel}
@@ -251,7 +251,7 @@ export function LotBrowser({ basePath = "/lots" }: { basePath?: string }) {
             }
           />
         ) : effectiveView === "grid" ? (
-          <div className={LOT_GRID}>
+          <div className={grid}>
             {lots.data.items.map((lot, i) => (
               <LotCard key={lot.id} lot={lot} categoryName={categoryName.get(lot.categoryId)} priority={i < 4} />
             ))}

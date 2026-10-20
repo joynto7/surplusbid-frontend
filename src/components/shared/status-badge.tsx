@@ -57,7 +57,7 @@ const MAP: Record<AnyStatus, { tone: Tone; label: string }> = {
   ARCHIVED: { tone: "neutral", label: "Archived" },
   BUYER: { tone: "info", label: "Buyer" },
   SELLER: { tone: "warning", label: "Seller" },
-  ADMIN: { tone: "danger", label: "Admin" },
+  ADMIN: { tone: "success", label: "Admin" },
   WATCHING: { tone: "neutral", label: "Watching" },
   WON: { tone: "success", label: "Won" },
   LOST: { tone: "neutral", label: "Lost" },

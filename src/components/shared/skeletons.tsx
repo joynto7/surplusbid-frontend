@@ -35,6 +35,8 @@ export function TableSkeleton({ rows = 6, cols = 5 }: { rows?: number; cols?: nu
 
 /** The catalogue grid: one column on phones, two on tablets, four on desktop. */
 export const LOT_GRID = "grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4";
+/** Inside dashboards the sidebar takes width, so four per row starts at xl. */
+export const DASHBOARD_LOT_GRID = "grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4";
 
 /** Same footprint as LotCard, so the page doesn't jump when data arrives. */
 export function LotCardSkeleton() {
@@ -57,9 +59,9 @@ export function LotCardSkeleton() {
   );
 }
 
-export function LotGridSkeleton({ count = 8 }: { count?: number }) {
+export function LotGridSkeleton({ count = 8, className = LOT_GRID }: { count?: number; className?: string }) {
   return (
-    <div className={LOT_GRID}>
+    <div className={className}>
       {Array.from({ length: count }, (_, i) => (
         // biome-ignore lint/suspicious/noArrayIndexKey: static skeleton cards
         <LotCardSkeleton key={i} />

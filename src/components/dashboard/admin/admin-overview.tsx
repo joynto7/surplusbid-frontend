@@ -24,7 +24,6 @@ import { StatusBadge } from "@/components/shared/status-badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { axisMoney, dayLabel, monthLabel } from "@/lib/analytics";
 import { formatMoney, formatRelative, initials } from "@/lib/format";
 import { adminAnalyticsQuery, adminStatsQuery, auditLogsQuery } from "@/lib/queries";
@@ -54,6 +53,8 @@ export function AdminOverview() {
   const bids30 = a?.bidsPerDay.reduce((sum, d) => sum + d.bids, 0) ?? 0;
   const gmv = (a?.gmvPerMonth ?? []).map((m) => ({ label: monthLabel(m.month), value: m.gmvCents }));
   const bids = (a?.bidsPerDay ?? []).map((d) => ({ label: dayLabel(d.day), value: d.bids }));
+  const categories = [...(a?.categories ?? [])].sort((x, y) => y.gmvCents - x.gmvCents);
+  const topSales = categories[0]?.gmvCents ?? 0;
   const signups = (a?.signupsPerMonth ?? []).map((m) => ({
     label: monthLabel(m.month),
     buyers: m.buyers,
@@ -212,50 +213,31 @@ export function AdminOverview() {
         <Card>
           <CardHeader>
             <CardTitle>Category performance</CardTitle>
-            <CardDescription>Sales and sell-through rate (sold ÷ closed lots) per category</CardDescription>
+            <CardDescription>Ranked by sales, with sell-through (sold ÷ closed lots) per category</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="overflow-hidden rounded-lg border">
-              <Table>
-                <TableHeader>
-                  <TableRow className="bg-muted/40 hover:bg-muted/40">
-                    <TableHead>Category</TableHead>
-                    <TableHead className="text-right">Live</TableHead>
-                    <TableHead className="hidden text-right sm:table-cell">Sold</TableHead>
-                    <TableHead className="text-right">Sales</TableHead>
-                    <TableHead className="hidden w-40 md:table-cell">Sell-through</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {(a?.categories ?? []).map((c) => (
-                    <TableRow key={c.categoryId}>
-                      <TableCell>
-                        <Link href={`/lots?categoryId=${c.categoryId}`} className="font-medium hover:text-primary">
-                          {c.name}
-                        </Link>
-                      </TableCell>
-                      <TableCell className="text-right tabular-nums">{c.liveLots}</TableCell>
-                      <TableCell className="hidden text-right tabular-nums sm:table-cell">{c.soldLots}</TableCell>
-                      <TableCell className="text-right tabular-nums">{formatMoney(c.gmvCents)}</TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        {c.sellThroughRate === null ? (
-                          <span className="text-muted-foreground text-xs">No closed lots</span>
-                        ) : (
-                          <div className="flex items-center gap-2">
-                            <Progress
-                              value={c.sellThroughRate}
-                              className="h-1.5"
-                              aria-label={`${c.name} sell-through`}
-                            />
-                            <span className="w-9 text-right text-xs tabular-nums">{c.sellThroughRate}%</span>
-                          </div>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
+            <ol className="grid gap-x-8 gap-y-4 sm:grid-cols-2">
+              {categories.map((c, i) => (
+                <li key={c.categoryId} className="space-y-1.5">
+                  <div className="flex items-baseline justify-between gap-3 text-sm">
+                    <Link href={`/lots?categoryId=${c.categoryId}`} className="truncate font-medium hover:text-primary">
+                      <span className="mr-1.5 text-muted-foreground tabular-nums">{i + 1}.</span>
+                      {c.name}
+                    </Link>
+                    <span className="shrink-0 font-semibold tabular-nums">{formatMoney(c.gmvCents)}</span>
+                  </div>
+                  <Progress
+                    value={topSales ? (c.gmvCents / topSales) * 100 : 0}
+                    className="h-1.5"
+                    aria-label={`${c.name} sales compared with the top category`}
+                  />
+                  <p className="text-muted-foreground text-xs">
+                    {c.liveLots} live · {c.soldLots} sold ·{" "}
+                    {c.sellThroughRate === null ? "no closed lots yet" : `${c.sellThroughRate}% sell-through`}
+                  </p>
+                </li>
+              ))}
+            </ol>
           </CardContent>
         </Card>
         <Card>
