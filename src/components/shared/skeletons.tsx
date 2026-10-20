@@ -33,22 +33,36 @@ export function TableSkeleton({ rows = 6, cols = 5 }: { rows?: number; cols?: nu
   );
 }
 
-export function LotGridSkeleton({ count = 6 }: { count?: number }) {
+/** The catalogue grid: one column on phones, two on tablets, four on desktop. */
+export const LOT_GRID = "grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4";
+
+/** Same footprint as LotCard, so the page doesn't jump when data arrives. */
+export function LotCardSkeleton() {
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <Card className="h-full gap-0 overflow-hidden py-0">
+      <Skeleton className="aspect-4/3 w-full rounded-none" />
+      <CardContent className="space-y-3 p-4">
+        <div className="flex justify-between">
+          <Skeleton className="h-3 w-20" />
+          <Skeleton className="h-3 w-16" />
+        </div>
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-2/3" />
+        <Skeleton className="h-3.5 w-full" />
+        <Skeleton className="h-3.5 w-4/5" />
+        <Skeleton className="h-14 w-full rounded-lg" />
+        <Skeleton className="h-8 w-full" />
+      </CardContent>
+    </Card>
+  );
+}
+
+export function LotGridSkeleton({ count = 8 }: { count?: number }) {
+  return (
+    <div className={LOT_GRID}>
       {Array.from({ length: count }, (_, i) => (
         // biome-ignore lint/suspicious/noArrayIndexKey: static skeleton cards
-        <Card key={i} className="overflow-hidden pt-0">
-          <Skeleton className="aspect-4/3 w-full rounded-none" />
-          <CardContent className="space-y-2">
-            <Skeleton className="h-4 w-3/4" />
-            <Skeleton className="h-4 w-1/2" />
-            <div className="flex justify-between pt-2">
-              <Skeleton className="h-6 w-20" />
-              <Skeleton className="h-6 w-16" />
-            </div>
-          </CardContent>
-        </Card>
+        <LotCardSkeleton key={i} />
       ))}
     </div>
   );

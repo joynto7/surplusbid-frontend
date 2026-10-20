@@ -14,7 +14,7 @@ export default function LotsLoading() {
         <Skeleton className="h-8 w-32" />
         <Skeleton className="h-8 w-40" />
       </div>
-      <LotGridSkeleton count={9} />
+      <LotGridSkeleton count={8} />
     </div>
   );
 }

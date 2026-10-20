@@ -31,7 +31,7 @@ import { formatDateTime, formatMoney } from "@/lib/format";
 import { lotQuery } from "@/lib/queries";
 import { type BidValues, bidSchema } from "@/lib/validation";
 import { useDeposits } from "@/stores/deposit-store";
-import type { Lot, Role } from "@/types/api";
+import type { Lot, LotDetail, Role } from "@/types/api";
 
 export interface Viewer {
   id: string;
@@ -39,7 +39,7 @@ export interface Viewer {
 }
 
 /** Live price box + the buyer's deposit → bid flow. Everything else sees a role-appropriate call to action. */
-export function BidPanel({ initialLot, viewer }: { initialLot: Lot; viewer: Viewer | null }) {
+export function BidPanel({ initialLot, viewer }: { initialLot: LotDetail; viewer: Viewer | null }) {
   const { data: lot = initialLot } = useQuery({ ...lotQuery(initialLot.id), initialData: initialLot });
   const live = lot.status === "LIVE" && new Date(lot.endTime).getTime() > Date.now();
   const current = lot.currentHighestBidAmountCents;
@@ -48,7 +48,7 @@ export function BidPanel({ initialLot, viewer }: { initialLot: Lot; viewer: View
   const leading = viewer?.role === "BUYER" && lot.currentHighestBidderId === viewer.id;
 
   return (
-    <Card className="lg:sticky lg:top-20">
+    <Card>
       <CardHeader className="gap-3">
         <div className="flex items-center justify-between">
           <StatusBadge status={lot.status} />

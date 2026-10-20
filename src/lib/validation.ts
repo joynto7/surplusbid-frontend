@@ -38,6 +38,14 @@ export const profileSchema = z.object({
     .trim()
     .max(32, "Tax ID is too long")
     .regex(/^[A-Za-z0-9-]*$/, "Use letters, numbers and dashes only"),
+  contactName: z.string().trim().max(80, "Keep the name under 80 characters"),
+  phone: z
+    .string()
+    .trim()
+    .max(30, "Phone number is too long")
+    .regex(/^([+\d][\d\s().-]*)?$/, "Use digits, spaces and + ( ) - only"),
+  location: z.string().trim().max(80, "Keep the location under 80 characters"),
+  bio: z.string().trim().max(500, "Keep the bio under 500 characters"),
 });
 export type ProfileValues = z.infer<typeof profileSchema>;
 
@@ -62,6 +70,12 @@ const money = (label: string) =>
     .positive(`${label[0].toUpperCase()}${label.slice(1)} must be greater than $0`)
     .max(10_000_000, `${label[0].toUpperCase()}${label.slice(1)} is too large`);
 
+export const lotSpecSchema = z.object({
+  label: z.string().trim().min(1, "Add a label").max(40, "Keep labels under 40 characters"),
+  value: z.string().trim().min(1, "Add a value").max(120, "Keep values under 120 characters"),
+});
+export const MAX_LOT_SPECS = 12;
+
 /** Wizard step 1: what is being sold. */
 export const lotDetailsSchema = z.object({
   title: z
@@ -75,7 +89,13 @@ export const lotDetailsSchema = z.object({
     .number({ error: "Enter a quantity" })
     .int("Quantity must be a whole number")
     .positive("Quantity must be at least 1"),
+  location: z
+    .string()
+    .trim()
+    .min(2, "Enter the pickup location, e.g. Houston, TX")
+    .max(80, "Keep the location under 80 characters"),
   description: z.string().trim().min(10, "Description must be at least 10 characters"),
+  specs: z.array(lotSpecSchema).max(MAX_LOT_SPECS, `Up to ${MAX_LOT_SPECS} specifications`),
 });
 
 /** Wizard step 2: photos (only at creation; the backend can't add them later). */
@@ -138,6 +158,7 @@ export type SellerDefaultsValues = z.infer<typeof sellerDefaultsSchema>;
 
 export const categorySchema = z.object({
   name: z.string().trim().min(2, "Category name must be at least 2 characters").max(40, "Keep it under 40 characters"),
+  description: z.string().trim().max(200, "Keep the description under 200 characters"),
 });
 export type CategoryValues = z.infer<typeof categorySchema>;
 
@@ -152,12 +173,26 @@ export const disputeSchema = z.object({
 });
 export type DisputeValues = z.infer<typeof disputeSchema>;
 
-export const resolveDisputeSchema = z.object({
-  disputeId: z.uuid("Enter the dispute ID (a UUID)"),
+export const disputeDecisionSchema = z.object({
   status: z.enum(["RESOLVED", "REJECTED"]),
-  resolutionNote: z.string().trim().min(3, "Add a resolution note of at least 3 characters"),
+  resolutionNote: z
+    .string()
+    .trim()
+    .min(3, "Add a resolution note of at least 3 characters")
+    .max(1000, "Keep the note under 1000 characters"),
 });
-export type ResolveDisputeValues = z.infer<typeof resolveDisputeSchema>;
+export type DisputeDecisionValues = z.infer<typeof disputeDecisionSchema>;
+
+export const reviewSchema = z.object({
+  rating: z.number({ error: "Choose a star rating" }).int().min(1, "Choose a star rating").max(5),
+  title: z.string().trim().min(3, "Give your review a short title").max(80, "Keep the title under 80 characters"),
+  comment: z
+    .string()
+    .trim()
+    .min(10, "Tell other buyers a bit more (at least 10 characters)")
+    .max(1000, "Keep it under 1000 characters"),
+});
+export type ReviewValues = z.infer<typeof reviewSchema>;
 
 export const contactSchema = z.object({
   name: z.string().trim().min(2, "Enter your name"),

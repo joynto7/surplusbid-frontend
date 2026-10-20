@@ -17,7 +17,7 @@ import { usePublishLot } from "@/hooks/use-seller-lots";
 import { axisMoney } from "@/lib/analytics";
 import { formatDateTime, formatMoney, lotCode } from "@/lib/format";
 import { bidHistoryQuery, lotQuery } from "@/lib/queries";
-import type { Lot } from "@/types/api";
+import type { LotDetail } from "@/types/api";
 
 const timeFmt = new Intl.DateTimeFormat("en-US", {
   month: "short",
@@ -26,7 +26,7 @@ const timeFmt = new Intl.DateTimeFormat("en-US", {
   minute: "2-digit",
 });
 
-export function LotPerformance({ initialLot }: { initialLot: Lot }) {
+export function LotPerformance({ initialLot }: { initialLot: LotDetail }) {
   const { data: lot = initialLot } = useQuery({ ...lotQuery(initialLot.id), initialData: initialLot });
   const history = useQuery(bidHistoryQuery(lot.id, 1, 50));
   const publish = usePublishLot();

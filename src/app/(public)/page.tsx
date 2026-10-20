@@ -1,263 +1,133 @@
 import type { Metadata } from "next";
-import Form from "next/form";
-import Link from "next/link";
+import { type HeroSlide, HeroSlider } from "@/components/home/hero-slider";
+import { NewsletterSection } from "@/components/home/newsletter-section";
+import { RecommendedSection } from "@/components/home/recommended-section";
 import {
-  LuArrowRight,
-  LuBadgeCheck,
-  LuBuilding2,
-  LuGavel,
-  LuHourglass,
-  LuSearch,
-  LuShieldCheck,
-  LuTimer,
-  LuTruck,
-  LuWallet,
-} from "react-icons/lu";
-import { LotCard } from "@/components/lots/lot-card";
-import { EmptyState } from "@/components/shared/empty-state";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+  BlogSection,
+  CategoriesSection,
+  CtaSection,
+  FaqSection,
+  FeaturesSection,
+  HowItWorksSection,
+  LotRowSection,
+  RecentlySoldSection,
+  StatsStrip,
+  TestimonialsSection,
+  TopSellersSection,
+} from "@/components/home/sections";
+import { unsplash } from "@/content/blog";
 import { publicApi } from "@/lib/api/server";
-import { DEPOSIT_PERCENT, PAYMENT_DEADLINE_HOURS } from "@/lib/config";
-import type { Category, Lot, Paginated } from "@/types/api";
+import type { Category } from "@/types/api";
 
 export const metadata: Metadata = {
   title: { absolute: "SurplusBid: B2B industrial surplus auctions" },
   description:
-    "Buy and sell industrial surplus in timed auctions. Verified businesses, refundable Stripe deposit holds and anti-sniping on every lot.",
+    "Buy and sell industrial surplus in timed auctions. Verified businesses, refundable Stripe deposit holds, anti-sniping and an AI assistant on every lot.",
   alternates: { canonical: "/" },
 };
 
-// Static page, regenerated at most once a minute (ISR) so live counts stay fresh.
+// Static page, regenerated at most once a minute (ISR) so live figures stay fresh.
 export const revalidate = 60;
 
-async function loadHome() {
-  const [closing, categories] = await Promise.allSettled([
-    publicApi.browseLots({ status: "LIVE", sortBy: "endTime", sortOrder: "asc", limit: 6 }),
-    publicApi.categories(),
-  ]);
-  return {
-    closing: closing.status === "fulfilled" ? closing.value : null,
-    categories: categories.status === "fulfilled" ? categories.value : [],
-  };
-}
-
-const STEPS = [
+const SPOTLIGHTS: Omit<HeroSlide, "categoryId" | "liveLots">[] = [
   {
-    icon: LuBadgeCheck,
-    title: "Verify your business",
-    body: "Upload a registration document. Our team reviews it before you can bid or list.",
+    slug: "machinery",
+    label: "Machinery",
+    title: "Production machinery from working plants",
+    body: "CNC centers, lasers and compressors from line consolidations, inspected and documented by the seller.",
+    image: unsplash("1647427060118-4911c9821b82", 2000),
   },
   {
-    icon: LuWallet,
-    title: "Authorize a deposit",
-    body: `Place a refundable ${DEPOSIT_PERCENT}% hold on your card per lot. Losing bidders are released automatically.`,
+    slug: "vehicles",
+    label: "Vehicles",
+    title: "Forklifts, trucks and fleet equipment",
+    body: "Retired fleet units with service records, sold by the companies that ran them.",
+    image: unsplash("1740914994657-f1cdffdc418e", 2000),
   },
   {
-    icon: LuGavel,
-    title: "Bid in real time",
-    body: "Bids inside the final two minutes extend the clock by two minutes, so no one wins by sniping.",
+    slug: "electronics",
+    label: "Electronics",
+    title: "Data center hardware, wiped to NIST 800-88",
+    body: "Servers, switches and laptops with certificates of data destruction.",
+    image: unsplash("1584169417032-d34e8d805e8b", 2000),
   },
   {
-    icon: LuTruck,
-    title: "Pay & collect",
-    body: `Winners pay the balance through Stripe within ${PAYMENT_DEADLINE_HOURS} hours, with the deposit already applied.`,
+    slug: "restaurant-equipment",
+    label: "Restaurant",
+    title: "Commercial kitchens at a fraction of new",
+    body: "Combi ovens, refrigeration and complete hot lines from restaurant refits and closures.",
+    image: unsplash("1790156591384-dbb7c31b0062", 2000),
   },
 ];
 
+async function loadHome() {
+  const settled = await Promise.allSettled([
+    publicApi.stats(),
+    publicApi.categories(),
+    publicApi.browseLots({ status: "LIVE", sortBy: "endTime", sortOrder: "asc", limit: 8 }),
+    publicApi.aiTrending(4),
+    publicApi.browseLots({ status: "SOLD", sortBy: "endTime", sortOrder: "desc", limit: 4 }),
+    publicApi.topSellers(6),
+    publicApi.latestReviews(6),
+  ]);
+  const value = <T,>(r: PromiseSettledResult<T>) => (r.status === "fulfilled" ? r.value : null);
+  const [stats, categories, closing, trending, sold, sellers, reviews] = settled;
+  return {
+    stats: value(stats),
+    categories: (value(categories) ?? []) as Category[],
+    closing: value(closing)?.items ?? null,
+    trending: value(trending),
+    sold: value(sold)?.items ?? null,
+    sellers: value(sellers),
+    reviews: value(reviews),
+  };
+}
+
 export default async function HomePage() {
-  const { closing, categories } = await loadHome();
-  const categoryName = new Map(categories.map((c: Category) => [c.id, c.name]));
+  const data = await loadHome();
+  const bySlug = new Map(data.categories.map((c) => [c.slug, c]));
+  const slides: HeroSlide[] = SPOTLIGHTS.map((s) => ({
+    ...s,
+    categoryId: bySlug.get(s.slug)?.id ?? null,
+    liveLots: bySlug.get(s.slug)?.liveLotCount ?? 0,
+  }));
 
   return (
     <>
-      <section className="relative overflow-hidden border-b">
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,var(--color-primary)/12%,transparent_60%)]"
-        />
-        <div className="mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 md:py-24 lg:grid-cols-[1.2fr_1fr] lg:items-center">
-          <div className="space-y-6">
-            <p className="inline-flex items-center gap-2 rounded-full border bg-background px-3 py-1 text-muted-foreground text-xs">
-              <LuShieldCheck className="size-3.5 text-success" aria-hidden /> Verified B2B buyers & sellers only
-            </p>
-            <h1 className="font-semibold text-4xl tracking-tight sm:text-5xl">
-              Industrial surplus, sold in <span className="text-primary">timed auctions</span>.
-            </h1>
-            <p className="max-w-xl text-lg text-muted-foreground">
-              Machinery, electronics, vehicles and raw materials from verified companies. Every bidder has a Stripe
-              deposit on the line, so every bid is real.
-            </p>
-            <Form action="/lots" className="flex max-w-lg gap-2" role="search">
-              <div className="relative flex-1">
-                <LuSearch
-                  className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
-                  aria-hidden
-                />
-                <Input
-                  name="q"
-                  aria-label="Search auctions"
-                  placeholder="Search CNC, forklifts, servers…"
-                  className="h-10 pl-9"
-                />
-              </div>
-              <Button type="submit" size="lg" className="h-10 px-4">
-                Search
-              </Button>
-            </Form>
-            <div className="flex flex-wrap gap-2">
-              {categories.map((c) => (
-                <Button key={c.id} variant="outline" size="sm" asChild className="rounded-full">
-                  <Link href={`/lots?categoryId=${c.id}`}>{c.name}</Link>
-                </Button>
-              ))}
-            </div>
-          </div>
-
-          <Card className="border-primary/20 shadow-lg">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <LuHourglass className="size-4 text-primary" aria-hidden /> On the floor right now
-              </CardTitle>
-              <CardDescription>Live figures from the SurplusBid API.</CardDescription>
-            </CardHeader>
-            <CardContent className="grid grid-cols-2 gap-3">
-              <div className="rounded-lg bg-muted/60 p-4">
-                <p className="font-semibold text-3xl tabular-nums">{closing?.meta.total ?? "—"}</p>
-                <p className="text-muted-foreground text-sm">Live lots</p>
-              </div>
-              <div className="rounded-lg bg-muted/60 p-4">
-                <p className="font-semibold text-3xl tabular-nums">{categories.length || "—"}</p>
-                <p className="text-muted-foreground text-sm">Categories</p>
-              </div>
-              <div className="col-span-2 flex items-center gap-3 rounded-lg border border-dashed p-4 text-sm">
-                <LuTimer className="size-5 shrink-0 text-warning" aria-hidden />
-                <p>
-                  <span className="font-medium">Anti-sniping on every lot.</span>{" "}
-                  <span className="text-muted-foreground">Late bids add two minutes to the clock.</span>
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl space-y-6 px-4 py-16 sm:px-6" aria-labelledby="closing-soon">
-        <div className="flex items-end justify-between gap-4">
-          <div>
-            <h2 id="closing-soon" className="font-semibold text-2xl tracking-tight">
-              Closing soon
-            </h2>
-            <p className="text-muted-foreground">Live lots ordered by closing time.</p>
-          </div>
-          <Button variant="ghost" asChild>
-            <Link href="/lots?status=LIVE&sortBy=endTime&sortOrder=asc">
-              View all <LuArrowRight />
-            </Link>
-          </Button>
-        </div>
-        <ClosingSoon lots={closing} categoryName={categoryName} />
-      </section>
-
-      <section className="border-y bg-muted/30" aria-labelledby="how">
-        <div className="mx-auto max-w-7xl space-y-8 px-4 py-16 sm:px-6">
-          <div className="max-w-2xl space-y-2">
-            <h2 id="how" className="font-semibold text-2xl tracking-tight">
-              Four steps from surplus to settled
-            </h2>
-            <p className="text-muted-foreground">No phone calls and no haggling. The same rules apply to every lot.</p>
-          </div>
-          <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {STEPS.map((s, i) => (
-              <li key={s.title}>
-                <Card className="h-full">
-                  <CardHeader>
-                    <span className="mb-2 flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                      <s.icon className="size-5" aria-hidden />
-                    </span>
-                    <CardTitle className="text-base">
-                      <span className="mr-1.5 font-mono text-muted-foreground">{i + 1}.</span>
-                      {s.title}
-                    </CardTitle>
-                    <CardDescription>{s.body}</CardDescription>
-                  </CardHeader>
-                </Card>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
-
-      <section className="mx-auto grid max-w-7xl gap-4 px-4 py-16 sm:px-6 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <LuBuilding2 className="mb-2 size-6 text-primary" aria-hidden />
-            <CardTitle>For buyers</CardTitle>
-            <CardDescription>
-              Source equipment below replacement cost. Track your bids, win, and pay securely by card.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button asChild>
-              <Link href="/register?role=BUYER">Register as a buyer</Link>
-            </Button>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <LuGavel className="mb-2 size-6 text-primary" aria-hidden />
-            <CardTitle>For sellers</CardTitle>
-            <CardDescription>
-              Turn idle inventory into cash. List a lot in minutes with a reserve price and a guaranteed deposit from
-              the winner.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button variant="outline" asChild>
-              <Link href="/register?role=SELLER">Register as a seller</Link>
-            </Button>
-          </CardContent>
-        </Card>
-      </section>
+      <HeroSlider slides={slides} liveLots={data.stats?.liveLots ?? 0} />
+      <StatsStrip stats={data.stats} />
+      <CategoriesSection categories={data.categories} />
+      <LotRowSection
+        id="closing-soon"
+        eyebrow="Closing soon"
+        title="Last chance to bid"
+        description="Live lots ordered by closing time. Late bids extend the clock, so there's still time."
+        action={{ href: "/lots?sort=ending", label: "View all" }}
+        lots={data.closing?.slice(0, 4) ?? null}
+        empty={{
+          title: "No live auctions right now",
+          description: "New lots are published by verified sellers every week.",
+        }}
+      />
+      <RecommendedSection />
+      <LotRowSection
+        id="trending"
+        eyebrow="Trending · AI ranked"
+        title="Where the bidding is hottest"
+        description="Ranked by bids, distinct bidders and views in the last 24 hours."
+        action={{ href: "/lots?sort=popular", label: "Most popular" }}
+        lots={data.trending}
+        empty={{ title: "Bidding is quiet right now", description: "Check back soon, or browse every live lot." }}
+      />
+      <HowItWorksSection />
+      <FeaturesSection />
+      <RecentlySoldSection lots={data.sold} />
+      <TopSellersSection sellers={data.sellers} />
+      <TestimonialsSection reviews={data.reviews} />
+      <BlogSection />
+      <FaqSection />
+      <NewsletterSection />
+      <CtaSection />
     </>
-  );
-}
-
-function ClosingSoon({ lots, categoryName }: { lots: Paginated<Lot> | null; categoryName: Map<string, string> }) {
-  if (!lots) {
-    return (
-      <EmptyState
-        icon={LuHourglass}
-        title="Auctions are loading slowly"
-        description="The SurplusBid API didn't respond in time. Refresh in a moment, or open the full catalog."
-        action={
-          <Button variant="outline" asChild>
-            <Link href="/lots">Open catalog</Link>
-          </Button>
-        }
-      />
-    );
-  }
-  if (lots.items.length === 0) {
-    return (
-      <EmptyState
-        icon={LuGavel}
-        title="No live auctions right now"
-        description="New lots are published by verified sellers every week. Register to get ready for the next one."
-        action={
-          <Button asChild>
-            <Link href="/register">Register your business</Link>
-          </Button>
-        }
-      />
-    );
-  }
-  return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {lots.items.map((lot, i) => (
-        <LotCard key={lot.id} lot={lot} categoryName={categoryName.get(lot.categoryId)} priority={i < 3} />
-      ))}
-    </div>
   );
 }

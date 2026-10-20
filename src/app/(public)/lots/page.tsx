@@ -8,9 +8,9 @@ import { qk, toLotQuery } from "@/lib/query-keys";
 import { prefetch } from "@/lib/server-query";
 
 export const metadata: Metadata = {
-  title: "Live auctions",
+  title: "Explore auctions",
   description:
-    "Browse live SurplusBid auctions for machinery, electronics, vehicles, furniture and raw materials. Filter by category and sort by closing time or price.",
+    "Browse live SurplusBid auctions for machinery, electronics, vehicles, furniture, raw materials, lab and restaurant equipment. Search in plain English, filter by price, location and condition, and sort by closing time or price.",
   alternates: { canonical: "/lots" },
   openGraph: { title: "Live industrial surplus auctions", url: "/lots" },
 };
@@ -33,9 +33,10 @@ export default async function LotsPage({ searchParams }: PageProps<"/lots">) {
   return (
     <div className="mx-auto max-w-7xl space-y-6 px-4 py-10 sm:px-6">
       <header className="space-y-1">
-        <h1 className="font-semibold text-3xl tracking-tight">Auctions</h1>
+        <h1 className="font-bold text-3xl tracking-tight sm:text-4xl">Explore auctions</h1>
         <p className="text-muted-foreground">
-          Every lot is listed by a verified seller. Bidding requires a verified buyer account and a deposit hold.
+          Every lot is listed by a verified seller. Search by keyword, or describe what you need and let the AI set the
+          filters.
         </p>
       </header>
       <HydrationBoundary state={state}>

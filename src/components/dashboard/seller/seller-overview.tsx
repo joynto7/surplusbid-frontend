@@ -130,7 +130,7 @@ export function SellerOverview() {
       )}
 
       <Card>
-        <CardHeader className="flex-row items-center justify-between">
+        <CardHeader className="flex flex-row items-center justify-between">
           <div className="space-y-1.5">
             <CardTitle>Closing soon</CardTitle>
             <CardDescription>Your live lots by time remaining</CardDescription>

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { LuSearch, LuX } from "react-icons/lu";
 import { Input } from "@/components/ui/input";
 import { useDebounce } from "@/hooks/use-debounce";
+import { cn } from "@/lib/utils";
 
 /** Debounced search box; commits to the URL only after the user pauses typing. */
 export function SearchInput({
@@ -11,11 +12,13 @@ export function SearchInput({
   onChange,
   placeholder = "Search…",
   label = "Search",
+  className,
 }: {
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
   label?: string;
+  className?: string;
 }) {
   const [draft, setDraft] = useState(value);
   const debounced = useDebounce(draft);
@@ -28,7 +31,7 @@ export function SearchInput({
   }, [debounced, onChange, value]);
 
   return (
-    <div className="relative w-full sm:max-w-xs">
+    <div className={cn("relative w-full sm:max-w-xs", className)}>
       <LuSearch className="absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
       <Input
         type="search"

@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { LuCheck, LuDownload, LuFilterX, LuUsers, LuUserX, LuX } from "react-icons/lu";
 import { type Column, DataTable } from "@/components/shared/data-table";
 import { PaginationBar } from "@/components/shared/pagination-bar";
+import { SearchInput } from "@/components/shared/search-input";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -13,7 +14,7 @@ import { formatDate, initials } from "@/lib/format";
 import { adminUsersQuery } from "@/lib/queries";
 import type { AdminUser, Role, VerificationStatus } from "@/types/api";
 
-const DEFAULTS = { role: "all", status: "all" };
+const DEFAULTS = { role: "all", status: "all", q: "" };
 const PER_PAGE = 10;
 
 function toCsv(rows: AdminUser[]) {
@@ -84,9 +85,10 @@ export function UsersTable() {
     limit: PER_PAGE,
     role: values.role === "all" ? undefined : (values.role as Role),
     verificationStatus: values.status === "all" ? undefined : (values.status as VerificationStatus),
+    q: values.q || undefined,
   };
   const users = useQuery(adminUsersQuery(query));
-  const filtered = values.role !== "all" || values.status !== "all";
+  const filtered = values.role !== "all" || values.status !== "all" || values.q !== "";
 
   const exportCsv = () => {
     if (!users.data) return;
@@ -98,6 +100,13 @@ export function UsersTable() {
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-2">
+        <SearchInput
+          value={values.q}
+          className="sm:w-60"
+          onChange={(q) => set({ q })}
+          placeholder="Search company or email"
+          label="Search users"
+        />
         <Select value={values.role} onValueChange={(role) => set({ role })}>
           <SelectTrigger className="w-36" aria-label="Role">
             <SelectValue />
@@ -122,7 +131,7 @@ export function UsersTable() {
           </SelectContent>
         </Select>
         {filtered && (
-          <Button variant="ghost" onClick={() => set({ role: "all", status: "all" })}>
+          <Button variant="ghost" onClick={() => set({ role: "all", status: "all", q: "" })}>
             <LuFilterX /> Clear
           </Button>
         )}
@@ -137,7 +146,11 @@ export function UsersTable() {
         dimmed={users.isPlaceholderData}
         getRowId={(u) => u.id}
         caption="Registered businesses"
-        empty={{ icon: LuUsers, title: "No users match these filters", description: "Try a different role or status." }}
+        empty={{
+          icon: LuUsers,
+          title: "No users match these filters",
+          description: "Try a different search, role or status.",
+        }}
       />
       {users.data && (
         <PaginationBar

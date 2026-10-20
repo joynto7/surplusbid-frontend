@@ -1,11 +1,12 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import { SITE_URL } from "@/lib/config";
 import { Providers } from "@/providers";
 import "./globals.css";
 
 const inter = Inter({ variable: "--font-sans", subsets: ["latin"], display: "swap" });
 const mono = JetBrains_Mono({ variable: "--font-jetbrains-mono", subsets: ["latin"], display: "swap" });
+const display = Plus_Jakarta_Sans({ variable: "--font-display", subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -33,7 +34,11 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${mono.variable} h-full antialiased`}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${inter.variable} ${mono.variable} ${display.variable} h-full antialiased`}
+    >
       <body className="flex min-h-full flex-col">
         <a
           href="#main"

@@ -63,3 +63,12 @@ export const axisMoney = (cents: number) => {
   if (Math.abs(dollars) >= 1_000) return `$${(dollars / 1_000).toFixed(1)}k`;
   return `$${Math.round(dollars)}`;
 };
+
+const utcMonthFmt = new Intl.DateTimeFormat("en-US", { month: "short", timeZone: "UTC" });
+const utcDayFmt = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
+
+/** "2026-05" → "May" (API month buckets are UTC). */
+export const monthLabel = (month: string) => utcMonthFmt.format(new Date(`${month}-01T00:00:00Z`));
+
+/** "2026-10-19" → "Oct 19" (API day buckets are UTC). */
+export const dayLabel = (day: string) => utcDayFmt.format(new Date(`${day}T00:00:00Z`));
