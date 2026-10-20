@@ -136,7 +136,7 @@ export function BuyerOverview() {
       </div>
 
       <Card>
-        <CardHeader className="flex-row items-center justify-between">
+        <CardHeader className="flex flex-row items-center justify-between">
           <div className="space-y-1.5">
             <CardTitle>Live lots you&apos;re in</CardTitle>
             <CardDescription>Sorted by your most recent bid</CardDescription>

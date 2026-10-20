@@ -5,6 +5,7 @@ import {
   LuFileSearch,
   LuGavel,
   LuHeart,
+  LuInbox,
   LuLayoutDashboard,
   LuListChecks,
   LuPackage,
@@ -13,6 +14,8 @@ import {
   LuScale,
   LuScrollText,
   LuSearch,
+  LuSparkles,
+  LuStar,
   LuTags,
   LuUserCog,
   LuUsers,
@@ -48,6 +51,7 @@ export const NAV: Record<Role, NavSection[]> = {
     {
       label: "Account",
       items: [
+        { href: "/buyer/reviews", label: "My reviews", icon: LuStar },
         { href: "/buyer/disputes", label: "Disputes", icon: LuScale },
         { href: "/buyer/profile", label: "Profile & settings", icon: LuUserCog },
       ],
@@ -66,6 +70,7 @@ export const NAV: Record<Role, NavSection[]> = {
     {
       label: "Account",
       items: [
+        { href: "/seller/reviews", label: "Reviews", icon: LuStar },
         { href: "/seller/disputes", label: "Disputes", icon: LuScale },
         { href: "/seller/profile", label: "Profile & availability", icon: LuUserCog },
       ],
@@ -76,6 +81,7 @@ export const NAV: Record<Role, NavSection[]> = {
       label: "Operations",
       items: [
         { href: "/admin", label: "Overview", icon: LuLayoutDashboard, exact: true },
+        { href: "/admin/insights", label: "AI insights", icon: LuSparkles },
         { href: "/admin/verifications", label: "Verification queue", icon: LuBadgeCheck },
         { href: "/admin/users", label: "Users", icon: LuUsers },
         { href: "/admin/lots", label: "Lots", icon: LuListChecks },
@@ -83,10 +89,18 @@ export const NAV: Record<Role, NavSection[]> = {
       ],
     },
     {
-      label: "Oversight",
+      label: "Moderation",
       items: [
         { href: "/admin/disputes", label: "Disputes", icon: LuScale },
+        { href: "/admin/reviews", label: "Reviews", icon: LuStar },
+        { href: "/admin/messages", label: "Messages", icon: LuInbox },
         { href: "/admin/audit-logs", label: "Audit log & reports", icon: LuScrollText },
+      ],
+    },
+    {
+      label: "Account",
+      items: [
+        { href: "/admin/profile", label: "Profile & settings", icon: LuUserCog },
         { href: "/lots", label: "Public catalog", icon: LuFileSearch },
       ],
     },

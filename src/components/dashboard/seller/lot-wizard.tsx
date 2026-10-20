@@ -30,9 +30,11 @@ import {
   lotPricingSchema,
   MAX_LOT_IMAGES,
 } from "@/lib/validation";
+import { useRequiredSession } from "@/providers/session-provider";
 import { useLotDraft } from "@/stores/lot-draft-store";
 import { usePreferences } from "@/stores/preferences-store";
 import type { Lot } from "@/types/api";
+import { ListingAssistant, PriceGuidanceCard } from "./listing-assistant";
 import { LotDetailsFields, LotPricingFields } from "./lot-fields";
 
 const STEPS = [
@@ -87,7 +89,9 @@ export function LotWizard({ relistFrom }: { relistFrom?: Lot | null }) {
         categoryId: relistFrom.categoryId,
         condition: relistFrom.condition,
         quantity: relistFrom.quantity,
+        location: relistFrom.location,
         description: relistFrom.description,
+        specs: relistFrom.specs ?? [],
       },
       {
         startingPrice: relistFrom.startingPriceCents / 100,
@@ -147,11 +151,20 @@ function StepCard({
 }
 
 function DetailsStep() {
+  const me = useRequiredSession();
   const { details, saveDetails, setStep } = useLotDraft();
   const defaults = usePreferences((s) => s.sellerDefaults);
   const form = useForm<LotDetailsValues>({
     resolver: zodResolver(lotDetailsSchema),
-    defaultValues: { title: "", description: "", condition: defaults.condition, quantity: 1, ...details },
+    defaultValues: {
+      title: "",
+      description: "",
+      condition: defaults.condition,
+      quantity: 1,
+      location: me.location ?? "",
+      specs: [],
+      ...details,
+    },
     mode: "onTouched",
   });
   return (
@@ -162,7 +175,10 @@ function DetailsStep() {
         setStep(1);
       })}
     >
-      <LotDetailsFields control={form.control} />
+      <div className="space-y-6">
+        <ListingAssistant form={form} />
+        <LotDetailsFields control={form.control} />
+      </div>
     </StepCard>
   );
 }
@@ -230,7 +246,10 @@ function PricingStep() {
         setStep(3);
       })}
     >
-      <LotPricingFields control={form.control} />
+      <div className="space-y-6">
+        <PriceGuidanceCard form={form} />
+        <LotPricingFields control={form.control} />
+      </div>
     </StepCard>
   );
 }
@@ -262,6 +281,8 @@ function ReviewStep() {
       endTime: localInputToIso(p.endTime),
     };
     for (const [k, v] of Object.entries(fields)) form.append(k, String(v));
+    form.append("location", d.location ?? "");
+    form.append("specs", JSON.stringify(d.specs ?? []));
     for (const img of images) form.append("images", img);
 
     setProgress(0);
@@ -305,6 +326,8 @@ function ReviewStep() {
             <ReviewRow label="Category" value={categoryName} />
             <ReviewRow label="Condition" value={d.condition} />
             <ReviewRow label="Quantity" value={d.quantity} />
+            <ReviewRow label="Pickup" value={d.location} />
+            <ReviewRow label="Specifications" value={`${d.specs?.length ?? 0} listed`} />
             <ReviewRow label="Photos" value={`${images.length} attached`} />
           </dl>
           <dl className="divide-y rounded-lg border text-sm">

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { FiledDisputes } from "@/components/dashboard/disputes/dispute-form";
+import { MyDisputes } from "@/components/dashboard/disputes/dispute-form";
 import { SellerDisputeForm } from "@/components/dashboard/disputes/eligible-lots";
 import { PageHeader } from "@/components/shared/page-header";
 
@@ -14,7 +14,7 @@ export default function SellerDisputesPage() {
       />
       <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
         <SellerDisputeForm />
-        <FiledDisputes />
+        <MyDisputes />
       </div>
     </div>
   );

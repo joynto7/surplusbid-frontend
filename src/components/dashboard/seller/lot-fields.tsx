@@ -1,14 +1,61 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import type { Control } from "react-hook-form";
+import { type Control, useFieldArray, useFormState } from "react-hook-form";
+import { LuPlus, LuX } from "react-icons/lu";
 import { SelectField, TextareaField, TextField } from "@/components/forms/fields";
-import { FieldGroup } from "@/components/ui/field";
+import { Button } from "@/components/ui/button";
+import { FieldDescription, FieldError, FieldGroup, FieldLegend, FieldSet } from "@/components/ui/field";
 import { DEPOSIT_PERCENT } from "@/lib/config";
 import { categoriesQuery } from "@/lib/queries";
-import type { LotDetailsValues, LotPricingValues } from "@/lib/validation";
+import { type LotDetailsValues, type LotPricingValues, MAX_LOT_SPECS } from "@/lib/validation";
 
 /** Field groups shared by the creation wizard and the draft editor. */
+
+/** Label/value rows shown in the Specifications table on the lot page. */
+function SpecsEditor({ control }: { control: Control<LotDetailsValues> }) {
+  const { fields, append, remove } = useFieldArray({ control, name: "specs" });
+  const { errors } = useFormState({ control, name: "specs" });
+  return (
+    <FieldSet className="gap-3">
+      <FieldLegend variant="label">Specifications</FieldLegend>
+      <FieldDescription>
+        Key facts buyers compare: make, model, year, hours, capacity, dimensions. Up to {MAX_LOT_SPECS}.
+      </FieldDescription>
+      {fields.length > 0 && (
+        <ul className="space-y-2">
+          {fields.map((f, i) => (
+            <li key={f.id} className="grid grid-cols-[1fr_1.4fr_auto] items-start gap-2">
+              <TextField control={control} name={`specs.${i}.label`} label="Label" placeholder="e.g. Hours" />
+              <TextField control={control} name={`specs.${i}.value`} label="Value" placeholder="e.g. 4,200" />
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="mt-6"
+                onClick={() => remove(i)}
+                aria-label={`Remove spec ${i + 1}`}
+              >
+                <LuX />
+              </Button>
+            </li>
+          ))}
+        </ul>
+      )}
+      {errors.specs?.root && <FieldError errors={[errors.specs.root]} />}
+      <Button
+        type="button"
+        variant="outline"
+        size="sm"
+        className="w-fit"
+        disabled={fields.length >= MAX_LOT_SPECS}
+        onClick={() => append({ label: "", value: "" })}
+      >
+        <LuPlus /> Add specification
+      </Button>
+    </FieldSet>
+  );
+}
 
 export function LotDetailsFields({ control }: { control: Control<LotDetailsValues> }) {
   const categories = useQuery(categoriesQuery());
@@ -31,22 +78,25 @@ export function LotDetailsFields({ control }: { control: Control<LotDetailsValue
         />
         <TextField control={control} name="condition" label="Condition" placeholder="Used - good" />
       </div>
-      <TextField
-        control={control}
-        name="quantity"
-        label="Quantity"
-        type="number"
-        min={1}
-        step={1}
-        className="sm:max-w-40"
-      />
+      <div className="grid gap-5 sm:grid-cols-[10rem_1fr]">
+        <TextField control={control} name="quantity" label="Quantity" type="number" min={1} step={1} />
+        <TextField
+          control={control}
+          name="location"
+          label="Pickup location"
+          placeholder="City, ST"
+          autoComplete="address-level2"
+          description="Shown on the lot card. Buyers filter by it."
+        />
+      </div>
       <TextareaField
         control={control}
         name="description"
         label="Description"
-        rows={6}
+        rows={7}
         placeholder="Specs, hours of use, maintenance history, what's included, and pickup/rigging notes."
       />
+      <SpecsEditor control={control} />
     </FieldGroup>
   );
 }

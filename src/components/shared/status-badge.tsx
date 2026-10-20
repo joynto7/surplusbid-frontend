@@ -1,5 +1,13 @@
 import { cn } from "@/lib/utils";
-import type { BidStatus, DisputeStatus, LotStatus, PaymentStatus, Role, VerificationStatus } from "@/types/api";
+import type {
+  BidStatus,
+  DisputeStatus,
+  LotStatus,
+  MessageStatus,
+  PaymentStatus,
+  Role,
+  VerificationStatus,
+} from "@/types/api";
 
 type Tone = "neutral" | "info" | "success" | "warning" | "danger" | "live";
 
@@ -18,6 +26,7 @@ type AnyStatus =
   | BidStatus
   | VerificationStatus
   | DisputeStatus
+  | MessageStatus
   | Role
   | "WATCHING"
   | "WON"
@@ -43,6 +52,9 @@ const MAP: Record<AnyStatus, { tone: Tone; label: string }> = {
   OPEN: { tone: "warning", label: "Open" },
   UNDER_REVIEW: { tone: "info", label: "Under review" },
   RESOLVED: { tone: "success", label: "Resolved" },
+  NEW: { tone: "info", label: "New" },
+  READ: { tone: "neutral", label: "Read" },
+  ARCHIVED: { tone: "neutral", label: "Archived" },
   BUYER: { tone: "info", label: "Buyer" },
   SELLER: { tone: "warning", label: "Seller" },
   ADMIN: { tone: "danger", label: "Admin" },

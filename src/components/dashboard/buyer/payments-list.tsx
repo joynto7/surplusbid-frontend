@@ -5,6 +5,8 @@ import Link from "next/link";
 import { LuCircleDollarSign, LuClock, LuReceipt, LuWallet } from "react-icons/lu";
 import { AreaTrendChart } from "@/components/charts/lazy";
 import { type Column, DataTable } from "@/components/shared/data-table";
+import { PaginationBar } from "@/components/shared/pagination-bar";
+import { SearchInput } from "@/components/shared/search-input";
 import { StatCard, StatGrid } from "@/components/shared/stat-card";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { Button } from "@/components/ui/button";
@@ -17,7 +19,8 @@ import { formatDate, formatDateTime, formatMoney, shortCode } from "@/lib/format
 import { myPaymentsQuery } from "@/lib/queries";
 import type { Lot, Payment, PaymentStatus } from "@/types/api";
 
-const DEFAULTS = { status: "all" };
+const DEFAULTS = { status: "all", q: "" };
+const PER_PAGE = 8;
 const STATUSES: (PaymentStatus | "all")[] = ["all", "PENDING", "SUCCEEDED", "FAILED", "REFUNDED"];
 
 function columns(lots: Map<string, Lot>): Column<Payment>[] {
@@ -59,11 +62,21 @@ function columns(lots: Map<string, Lot>): Column<Payment>[] {
 }
 
 export function PaymentsList() {
-  const { values, set } = useUrlState(DEFAULTS);
+  const { values, page, set, setPage } = useUrlState(DEFAULTS);
   const payments = useQuery(myPaymentsQuery());
   const items = payments.data?.items ?? [];
   const lots = useLotsByIds(items.map((p) => p.lotId));
-  const rows = items.filter((p) => values.status === "all" || p.status === values.status);
+  const q = values.q.trim().toLowerCase();
+  const matches = items.filter(
+    (p) =>
+      (values.status === "all" || p.status === values.status) &&
+      (!q ||
+        (lots.byId.get(p.lotId)?.title ?? "").toLowerCase().includes(q) ||
+        shortCode("INV", p.id).toLowerCase().includes(q)),
+  );
+  const totalPages = Math.max(1, Math.ceil(matches.length / PER_PAGE));
+  const current = Math.min(page, totalPages);
+  const rows = matches.slice((current - 1) * PER_PAGE, current * PER_PAGE);
 
   const paid = items.filter((p) => p.status === "SUCCEEDED");
   const pending = items.filter((p) => p.status === "PENDING");
@@ -116,20 +129,29 @@ export function PaymentsList() {
         </CardContent>
       </Card>
 
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="font-semibold text-lg">Invoices</h2>
-        <Select value={values.status} onValueChange={(status) => set({ status })}>
-          <SelectTrigger className="w-40" aria-label="Filter by status">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {STATUSES.map((s) => (
-              <SelectItem key={s} value={s}>
-                {s === "all" ? "All statuses" : s[0] + s.slice(1).toLowerCase()}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <div className="flex flex-wrap items-center gap-2">
+          <SearchInput
+            value={values.q}
+            className="sm:w-60"
+            onChange={(v) => set({ q: v })}
+            placeholder="Search lot or invoice"
+            label="Search invoices"
+          />
+          <Select value={values.status} onValueChange={(status) => set({ status })}>
+            <SelectTrigger className="w-40" aria-label="Filter by status">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {STATUSES.map((s) => (
+                <SelectItem key={s} value={s}>
+                  {s === "all" ? "All statuses" : s[0] + s.slice(1).toLowerCase()}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
       <DataTable
         columns={columns(lots.byId)}
@@ -139,10 +161,19 @@ export function PaymentsList() {
         caption="Your invoices"
         empty={{
           icon: LuReceipt,
-          title: values.status === "all" ? "No payments yet" : "No payments with this status",
+          title: values.status === "all" && !q ? "No payments yet" : "No payments match",
           description: "When you win a lot, its invoice appears here with a Pay now button.",
         }}
       />
+      {matches.length > 0 && (
+        <PaginationBar
+          page={current}
+          totalPages={totalPages}
+          total={matches.length}
+          onPage={setPage}
+          label="invoices"
+        />
+      )}
     </div>
   );
 }

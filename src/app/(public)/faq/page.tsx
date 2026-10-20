@@ -93,6 +93,9 @@ const SECTIONS: { title: string; items: { q: string; a: React.ReactNode }[] }[] 
   },
 ];
 
+/** "Deposits & payments" -> "deposits-payments", so links like /faq#disputes land on a section. */
+const slug = (title: string) => title.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+
 export default function FaqPage() {
   const faqJsonLd = {
     "@context": "https://schema.org",
@@ -122,8 +125,13 @@ export default function FaqPage() {
         </p>
       </header>
       {SECTIONS.map((s) => (
-        <section key={s.title} aria-labelledby={s.title} className="space-y-3">
-          <h2 id={s.title} className="font-semibold text-xl">
+        <section
+          key={s.title}
+          id={slug(s.title)}
+          aria-labelledby={`${slug(s.title)}-heading`}
+          className="scroll-mt-24 space-y-3"
+        >
+          <h2 id={`${slug(s.title)}-heading`} className="font-semibold text-xl">
             {s.title}
           </h2>
           <Accordion type="single" collapsible className="rounded-lg border px-4">

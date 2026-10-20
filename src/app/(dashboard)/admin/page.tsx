@@ -2,20 +2,20 @@ import { HydrationBoundary } from "@tanstack/react-query";
 import type { Metadata } from "next";
 import { AdminOverview } from "@/components/dashboard/admin/admin-overview";
 import { serverApi } from "@/lib/api/server";
-import { ADMIN_USERS_SAMPLE, qk } from "@/lib/query-keys";
+import { qk } from "@/lib/query-keys";
 import { prefetch } from "@/lib/server-query";
 
 export const metadata: Metadata = { title: "Admin overview" };
 
-/** Server prefetch of the heavy queries; charts hydrate from the same cache on the client. */
+/**
+ * Server prefetch of the stats and analytics; charts hydrate from the same
+ * cache on the client. The AI briefing loads client-side because it can take
+ * a few seconds when Claude writes it.
+ */
 export default async function AdminHomePage() {
   const state = await prefetch(
     (c) => c.prefetchQuery({ queryKey: qk.adminStats, queryFn: () => serverApi.adminStats() }),
-    (c) =>
-      c.prefetchQuery({
-        queryKey: qk.adminUsers(ADMIN_USERS_SAMPLE),
-        queryFn: () => serverApi.adminUsers(ADMIN_USERS_SAMPLE),
-      }),
+    (c) => c.prefetchQuery({ queryKey: qk.adminAnalytics, queryFn: () => serverApi.adminAnalytics() }),
     (c) =>
       c.prefetchQuery({
         queryKey: qk.auditLogs({ page: 1, limit: 6 }),

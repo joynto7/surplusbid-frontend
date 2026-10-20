@@ -16,3 +16,4 @@ export const BFF_PREFIX = "/api/backend";
 export const depositFor = (startingPriceCents: number) => Math.round(startingPriceCents * (DEPOSIT_PERCENT / 100));
 
 export const SUPPORT_EMAIL = "support@surplusbid.com";
+export const SUPPORT_PHONE = "+1 (312) 555-0199";

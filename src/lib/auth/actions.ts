@@ -51,25 +51,19 @@ const DEMO_ACCOUNTS: Record<Role, { email?: string; password?: string }> = {
   BUYER: { email: process.env.DEMO_BUYER_EMAIL, password: process.env.DEMO_BUYER_PASSWORD },
 };
 
+export type DemoCredentials = { ok: true; email: string; password: string } | { ok: false; message: string };
+
 /**
- * One-click demo login. Credentials live in server env vars, so evaluators
- * can sign in as any role without the passwords ever reaching the browser.
+ * Credentials for the demo account of a role, so the login form can fill them
+ * in and sign in like any user would. They're public by design (the README
+ * lists them); keeping them in env lets each deployment rotate them.
  */
-export async function demoLoginAction(role: Role): Promise<AuthResult> {
+export async function demoCredentialsAction(role: Role): Promise<DemoCredentials> {
   const account = DEMO_ACCOUNTS[role];
   if (!account?.email || !account.password) {
     return { ok: false, message: `The ${role.toLowerCase()} demo account isn't configured on this deployment.` };
   }
-  try {
-    const { user, accessToken, refreshToken } = await authenticate("/auth/login", {
-      email: account.email,
-      password: account.password,
-    });
-    await setSessionCookies(accessToken, refreshToken);
-    return { ok: true, redirectTo: homeForRole(user.role) };
-  } catch (error) {
-    return failure(error);
-  }
+  return { ok: true, email: account.email, password: account.password };
 }
 
 export async function registerAction(values: RegisterValues): Promise<AuthResult> {

@@ -3,6 +3,8 @@ import Link from "next/link";
 import { LuBadgeCheck, LuGavel, LuRecycle, LuShieldCheck } from "react-icons/lu";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { publicApi } from "@/lib/api/server";
+import { formatMoney } from "@/lib/format";
 
 export const metadata: Metadata = {
   title: "About",
@@ -35,7 +37,19 @@ const PRINCIPLES = [
   },
 ];
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const stats = await publicApi.stats().catch(() => null);
+  const figures = stats
+    ? [
+        { label: "Lots sold", value: stats.soldLots.toLocaleString() },
+        { label: "Value recovered", value: formatMoney(stats.gmvCents).replace(/\.00$/, "") },
+        { label: "Verified businesses", value: stats.verifiedBusinesses.toLocaleString() },
+        { label: "Sell-through rate", value: `${stats.sellThroughRate}%` },
+        { label: "Bids placed", value: stats.totalBids.toLocaleString() },
+        { label: "Average seller rating", value: stats.reviewCount ? `${stats.averageRating.toFixed(1)} / 5` : "New" },
+      ]
+    : [];
+
   return (
     <div className="mx-auto max-w-5xl space-y-16 px-4 py-16 sm:px-6">
       <header className="max-w-3xl space-y-4">
@@ -47,6 +61,23 @@ export default function AboutPage() {
           with transparent, timed auctions between verified businesses.
         </p>
       </header>
+
+      {figures.length > 0 && (
+        <section aria-labelledby="numbers" className="space-y-6">
+          <h2 id="numbers" className="font-semibold text-2xl tracking-tight">
+            SurplusBid by the numbers
+          </h2>
+          <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border bg-border md:grid-cols-3">
+            {figures.map((f) => (
+              <div key={f.label} className="bg-card p-6">
+                <dt className="text-muted-foreground text-sm">{f.label}</dt>
+                <dd className="mt-1 font-bold text-3xl tabular-nums tracking-tight">{f.value}</dd>
+              </div>
+            ))}
+          </dl>
+          <p className="text-muted-foreground text-sm">Live figures from the marketplace, updated every minute.</p>
+        </section>
+      )}
 
       <section aria-labelledby="principles" className="space-y-6">
         <h2 id="principles" className="font-semibold text-2xl tracking-tight">

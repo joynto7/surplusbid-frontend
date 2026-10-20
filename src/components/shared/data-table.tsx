@@ -10,10 +10,15 @@ export interface Column<T> {
   cell: (row: T) => React.ReactNode;
   className?: string;
   /** Hide below this breakpoint to keep tables readable on phones. */
-  hideBelow?: "sm" | "md" | "lg";
+  hideBelow?: "sm" | "md" | "lg" | "xl";
 }
 
-const HIDE = { sm: "hidden sm:table-cell", md: "hidden md:table-cell", lg: "hidden lg:table-cell" };
+const HIDE = {
+  sm: "hidden sm:table-cell",
+  md: "hidden md:table-cell",
+  lg: "hidden lg:table-cell",
+  xl: "hidden xl:table-cell",
+};
 
 /** Typed table with built-in loading skeleton and empty state; used by every list view. */
 export function DataTable<T>({

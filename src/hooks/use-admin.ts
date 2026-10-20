@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { api } from "@/lib/api/client";
 import { qk } from "@/lib/queries";
-import type { AdminUser, Category, Paginated } from "@/types/api";
+import type { AdminUser, Category, ContactMessage, MessageStatus, Paginated } from "@/types/api";
 
 /**
  * Approve/reject a business. Optimistically updates every cached users page
@@ -47,8 +47,8 @@ export function useVerifyUser() {
 export function useCreateCategory() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (name: string) => api.createCategory(name),
-    onMutate: async (name) => {
+    mutationFn: (input: { name: string; description?: string; imageUrl?: string }) => api.createCategory(input),
+    onMutate: async ({ name }) => {
       await qc.cancelQueries({ queryKey: qk.categories });
       const prev = qc.getQueryData<Category[]>(qk.categories);
       const slug = name.toLowerCase().trim().replace(/\s+/g, "-");
@@ -70,9 +70,48 @@ export function useResolveDispute() {
     mutationFn: (v: { id: string; status: "RESOLVED" | "REJECTED"; resolutionNote: string }) =>
       api.resolveDispute(v.id, { status: v.status, resolutionNote: v.resolutionNote }),
     onSuccess: (d) => {
-      toast.success(d.status === "RESOLVED" ? "Dispute resolved" : "Dispute rejected");
+      toast.success(d.status === "RESOLVED" ? "Dispute resolved" : "Claim rejected", {
+        description: "Both parties can now see the decision.",
+      });
       qc.invalidateQueries({ queryKey: ["admin"] });
     },
     meta: { errorToast: "Couldn't update the dispute" },
+  });
+}
+
+/** Marks a contact message read, unread or archived; every cached inbox page updates at once. */
+export function useUpdateMessage() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, status }: { id: string; status: MessageStatus }) => api.adminUpdateMessage(id, status),
+    onMutate: async ({ id, status }) => {
+      await qc.cancelQueries({ queryKey: ["admin", "messages"] });
+      const snapshots = qc.getQueriesData<Paginated<ContactMessage>>({ queryKey: ["admin", "messages"] });
+      for (const [key, page] of snapshots) {
+        if (page) qc.setQueryData(key, { ...page, items: page.items.map((m) => (m.id === id ? { ...m, status } : m)) });
+      }
+      return { snapshots };
+    },
+    onError: (_e, _v, ctx) => {
+      for (const [key, data] of ctx?.snapshots ?? []) qc.setQueryData(key, data);
+    },
+    onSettled: () => {
+      qc.invalidateQueries({ queryKey: ["admin", "messages"] });
+      qc.invalidateQueries({ queryKey: qk.adminStats });
+    },
+    meta: { errorToast: "Couldn't update the message" },
+  });
+}
+
+export function useDeleteReview() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => api.adminDeleteReview(id),
+    onSuccess: () => {
+      toast.success("Review removed", { description: "The seller's rating has been recalculated." });
+      qc.invalidateQueries({ queryKey: ["admin"] });
+      qc.invalidateQueries({ queryKey: ["reviews"] });
+    },
+    meta: { errorToast: "Couldn't remove the review" },
   });
 }

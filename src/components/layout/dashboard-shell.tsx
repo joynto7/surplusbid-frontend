@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useTransition } from "react";
-import { LuChevronsUpDown, LuExternalLink, LuLogOut, LuUserCog } from "react-icons/lu";
+import { LuChevronsUpDown, LuExternalLink, LuLayoutDashboard, LuLogOut, LuUserCog } from "react-icons/lu";
 import { toast } from "sonner";
 import { Logo } from "@/components/shared/logo";
 import { StatusBadge } from "@/components/shared/status-badge";
@@ -39,11 +39,18 @@ import { logoutAction } from "@/lib/auth/actions";
 import { initials } from "@/lib/format";
 import { useRequiredSession } from "@/providers/session-provider";
 import { NAV, ROLE_LABEL } from "./nav-config";
+import { ROLE_LINKS } from "./site-nav";
 
 function NavMenu() {
   const me = useRequiredSession();
   const pathname = usePathname();
   const { setOpenMobile } = useSidebar();
+
+  // Highlight only the most specific match, so /seller/lots/new marks "Create lot" and not "My listings" too.
+  const items = NAV[me.role].flatMap((s) => s.items);
+  const activeHref = items
+    .filter((i) => (i.exact ? pathname === i.href : pathname === i.href || pathname.startsWith(`${i.href}/`)))
+    .sort((a, b) => b.href.length - a.href.length)[0]?.href;
 
   return (
     <>
@@ -53,9 +60,7 @@ function NavMenu() {
           <SidebarGroupContent>
             <SidebarMenu>
               {section.items.map((item) => {
-                const active = item.exact
-                  ? pathname === item.href
-                  : pathname === item.href || pathname.startsWith(`${item.href}/`);
+                const active = item.href === activeHref;
                 return (
                   <SidebarMenuItem key={item.href}>
                     <SidebarMenuButton asChild isActive={active} tooltip={item.label}>
@@ -75,11 +80,58 @@ function NavMenu() {
   );
 }
 
-function UserMenu() {
+/** Items shared by the sidebar account menu and the top-bar profile menu. */
+function UserMenuItems() {
   const me = useRequiredSession();
   const [pending, startTransition] = useTransition();
-  const profileHref = me.role === "ADMIN" ? "/admin/audit-logs" : `/${me.role.toLowerCase()}/profile`;
+  const base = `/${me.role.toLowerCase()}`;
 
+  return (
+    <>
+      <DropdownMenuLabel className="flex items-center justify-between gap-2 font-normal">
+        <span className="text-muted-foreground text-xs">Signed in as {ROLE_LABEL[me.role]}</span>
+        <StatusBadge status={me.verificationStatus} />
+      </DropdownMenuLabel>
+      <DropdownMenuSeparator />
+      <DropdownMenuItem asChild>
+        <Link href={base}>
+          <LuLayoutDashboard /> Overview
+        </Link>
+      </DropdownMenuItem>
+      <DropdownMenuItem asChild>
+        <Link href={`${base}/profile`}>
+          <LuUserCog /> Profile & settings
+        </Link>
+      </DropdownMenuItem>
+      {ROLE_LINKS[me.role].map((l) => (
+        <DropdownMenuItem key={l.href} asChild>
+          <Link href={l.href}>
+            {l.icon && <l.icon />} {l.label}
+          </Link>
+        </DropdownMenuItem>
+      ))}
+      <DropdownMenuItem asChild>
+        <Link href="/">
+          <LuExternalLink /> Public site
+        </Link>
+      </DropdownMenuItem>
+      <DropdownMenuSeparator />
+      <DropdownMenuItem
+        variant="destructive"
+        disabled={pending}
+        onSelect={(e) => {
+          e.preventDefault();
+          startTransition(() => logoutAction());
+        }}
+      >
+        <LuLogOut /> Sign out
+      </DropdownMenuItem>
+    </>
+  );
+}
+
+function SidebarUserMenu() {
+  const me = useRequiredSession();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -97,34 +149,44 @@ function UserMenu() {
         </SidebarMenuButton>
       </DropdownMenuTrigger>
       <DropdownMenuContent side="top" align="start" className="w-(--radix-dropdown-menu-trigger-width) min-w-56">
-        <DropdownMenuLabel className="flex items-center justify-between gap-2 font-normal">
-          <span className="text-muted-foreground text-xs">Signed in as {ROLE_LABEL[me.role]}</span>
-          <StatusBadge status={me.verificationStatus} />
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        {me.role !== "ADMIN" && (
-          <DropdownMenuItem asChild>
-            <Link href={profileHref}>
-              <LuUserCog /> Profile & settings
-            </Link>
-          </DropdownMenuItem>
-        )}
-        <DropdownMenuItem asChild>
-          <Link href="/">
-            <LuExternalLink /> Public site
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          variant="destructive"
-          disabled={pending}
-          onSelect={(e) => {
-            e.preventDefault();
-            startTransition(() => logoutAction());
-          }}
+        <UserMenuItems />
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+/** Avatar button in the dashboard top bar. */
+function ProfileMenu() {
+  const me = useRequiredSession();
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          type="button"
+          aria-label={`Account menu for ${me.companyName}`}
+          className="rounded-full outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         >
-          <LuLogOut /> Sign out
-        </DropdownMenuItem>
+          <Avatar className="size-8">
+            <AvatarFallback className="bg-primary font-medium text-primary-foreground text-xs">
+              {initials(me.companyName)}
+            </AvatarFallback>
+          </Avatar>
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-64">
+        <div className="flex items-center gap-3 px-2 py-2">
+          <Avatar className="size-9">
+            <AvatarFallback className="bg-primary/15 font-medium text-primary text-xs">
+              {initials(me.companyName)}
+            </AvatarFallback>
+          </Avatar>
+          <div className="grid min-w-0 text-sm leading-tight">
+            <span className="truncate font-medium">{me.companyName}</span>
+            <span className="truncate text-muted-foreground text-xs">{me.email}</span>
+          </div>
+        </div>
+        <DropdownMenuSeparator />
+        <UserMenuItems />
       </DropdownMenuContent>
     </DropdownMenu>
   );
@@ -157,7 +219,7 @@ export function DashboardShell({ children, defaultOpen }: { children: React.Reac
         <SidebarFooter>
           <SidebarMenu>
             <SidebarMenuItem>
-              <UserMenu />
+              <SidebarUserMenu />
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarFooter>
@@ -168,8 +230,9 @@ export function DashboardShell({ children, defaultOpen }: { children: React.Reac
           <SidebarTrigger className="-ml-1" />
           <Separator orientation="vertical" className="mr-1 data-[orientation=vertical]:h-4" />
           <span className="font-medium text-sm">{ROLE_LABEL[me.role]} workspace</span>
-          <div className="ml-auto">
+          <div className="ml-auto flex items-center gap-2">
             <ThemeToggle />
+            <ProfileMenu />
           </div>
         </header>
         {/* SidebarInset already renders <main>; this is the skip-link target. */}

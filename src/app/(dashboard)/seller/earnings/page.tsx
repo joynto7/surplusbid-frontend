@@ -1,7 +1,9 @@
 import { HydrationBoundary } from "@tanstack/react-query";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Earnings } from "@/components/dashboard/seller/earnings";
 import { PageHeader } from "@/components/shared/page-header";
+import { DashboardSkeleton } from "@/components/shared/skeletons";
 import { serverApi } from "@/lib/api/server";
 import { qk } from "@/lib/query-keys";
 import { prefetch } from "@/lib/server-query";
@@ -19,7 +21,9 @@ export default async function EarningsPage() {
         description="Proceeds from sold lots, based on winning bids and captured deposits."
       />
       <HydrationBoundary state={state}>
-        <Earnings />
+        <Suspense fallback={<DashboardSkeleton stats={false} />}>
+          <Earnings />
+        </Suspense>
       </HydrationBoundary>
     </div>
   );

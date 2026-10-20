@@ -5,11 +5,15 @@ import Link from "next/link";
 import { LuBanknote, LuDownload, LuPiggyBank, LuReceipt, LuTrendingUp } from "react-icons/lu";
 import { BarTrendChart } from "@/components/charts/lazy";
 import { type Column, DataTable } from "@/components/shared/data-table";
+import { PaginationBar } from "@/components/shared/pagination-bar";
+import { SearchInput } from "@/components/shared/search-input";
 import { DashboardSkeleton } from "@/components/shared/skeletons";
 import { StatCard, StatGrid } from "@/components/shared/stat-card";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useUrlState } from "@/hooks/use-url-state";
 import { axisMoney, perMonth } from "@/lib/analytics";
 import { depositFor } from "@/lib/config";
 import { formatDate, formatMoney, lotCode } from "@/lib/format";
@@ -75,9 +79,19 @@ function downloadCsv(rows: LotListItem[]) {
   URL.revokeObjectURL(url);
 }
 
+const DEFAULTS = { q: "", period: "all" };
+const PER_PAGE = 8;
+const PERIODS: Record<string, { label: string; days: number | null }> = {
+  all: { label: "All time", days: null },
+  "30": { label: "Last 30 days", days: 30 },
+  "90": { label: "Last 90 days", days: 90 },
+  "365": { label: "Last 12 months", days: 365 },
+};
+
 /** Earnings from sold lots. The backend has no payout ledger, so figures come from winning bids. */
 export function Earnings() {
   const listings = useQuery(myListingsQuery());
+  const { values, page, set, setPage } = useUrlState(DEFAULTS);
   if (listings.isPending) return <DashboardSkeleton />;
 
   const s = sellerStats(listings.data ?? []);
@@ -89,6 +103,18 @@ export function Earnings() {
     (l) => l.currentHighestBidAmountCents ?? 0,
   );
   const avg = sold.length ? s.hammerCents / sold.length : 0;
+
+  const q = values.q.trim().toLowerCase();
+  const days = PERIODS[values.period]?.days ?? null;
+  const since = days ? Date.now() - days * 86_400_000 : 0;
+  const matches = sold.filter(
+    (l) =>
+      new Date(l.endTime).getTime() >= since &&
+      (!q || l.title.toLowerCase().includes(q) || lotCode(l.id).toLowerCase().includes(q)),
+  );
+  const totalPages = Math.max(1, Math.ceil(matches.length / PER_PAGE));
+  const current = Math.min(page, totalPages);
+  const rows = matches.slice((current - 1) * PER_PAGE, current * PER_PAGE);
 
   return (
     <div className="space-y-6">
@@ -128,23 +154,48 @@ export function Earnings() {
           />
         </CardContent>
       </Card>
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="font-semibold text-lg">Sold lots</h2>
-        <Button variant="outline" size="sm" onClick={() => downloadCsv(sold)} disabled={!sold.length}>
-          <LuDownload /> Export CSV
-        </Button>
+        <div className="flex flex-wrap items-center gap-2">
+          <SearchInput
+            value={values.q}
+            onChange={(v) => set({ q: v })}
+            placeholder="Search sold lots"
+            className="sm:w-60"
+          />
+          <Select value={values.period} onValueChange={(period) => set({ period })}>
+            <SelectTrigger className="w-40" aria-label="Closing period">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {Object.entries(PERIODS).map(([value, p]) => (
+                <SelectItem key={value} value={value}>
+                  {p.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Button variant="outline" onClick={() => downloadCsv(matches)} disabled={!matches.length}>
+            <LuDownload /> Export CSV
+          </Button>
+        </div>
       </div>
       <DataTable
         columns={columns}
-        rows={sold}
+        rows={rows}
         getRowId={(l) => l.id}
         caption="Sold lots"
         empty={{
           icon: LuBanknote,
-          title: "No sales yet",
-          description: "Sold lots and their proceeds will be listed here.",
+          title: sold.length ? "No sales match" : "No sales yet",
+          description: sold.length
+            ? "Try another search or period."
+            : "Sold lots and their proceeds will be listed here.",
         }}
       />
+      {matches.length > 0 && (
+        <PaginationBar page={current} totalPages={totalPages} total={matches.length} onPage={setPage} label="lots" />
+      )}
     </div>
   );
 }
