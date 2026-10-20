@@ -11,7 +11,7 @@ It consumes the [surplusbid-backend](https://github.com/joynto7/surplusbid-backe
 | | |
 | --- | --- |
 | Live frontend | https://surplusbid-frontend.vercel.app |
-| Live API | https://surplusbid-api.onrender.com/api/v1 |
+| Live API | https://surplusbid-backend-1.onrender.com/api/v1 |
 | API docs | https://documenter.getpostman.com/view/56417304/2sBYAxPUve |
 
 ## Tech stack
